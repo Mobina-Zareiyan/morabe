@@ -1,25 +1,54 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from .models import ContactUsMessages
-from .serializers import ContactUsMessageSerializer
+from siteinfo.models import SiteGlobalSetting, SocialMediaSetting
+from .serializers import ContactUsMessageSerializer, SiteGlobalSettingSerializer, SocialMediaSettingSerializer
 
-class ContactUsMessageViewSet(viewsets.ModelViewSet):
+class ContactUsViewSet(viewsets.ViewSet):
     """
-    ViewSet برای مدیریت پیام‌های فرم Contact Us
-    کاربران می‌توانند پیام جدید ارسال کنند (POST)
-    ادمین می‌تواند پیام‌ها را مشاهده و بررسی کند
+    ViewSet ترکیبی برای صفحه Contact Us:
+    - POST پیام جدید
+    - GET اطلاعات سایت و شبکه‌های اجتماعی
     """
-    queryset = ContactUsMessages.objects.all().order_by('-created')
-    serializer_class = ContactUsMessageSerializer
-
-    # دسترسی‌ها:
-    # کاربران فقط می‌تونن POST کنن و پیام‌ها رو ببینن.
-    # ادمین می‌تونه همه عملیات رو انجام بده.
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'update', 'partial_update', 'destroy']: #عملیات درحال اجرا
-
-            permission_classes = [permissions.IsAdminUser]
+        if self.action == 'create':
+            return [permissions.AllowAny()]
+        elif self.action == 'list_messages':
+            return [permissions.IsAdminUser()]
         else:
-            # بقیه عملیات (create) برای همه بازه
-            permission_classes = [permissions.AllowAny]
-        return [permission() for permission in permission_classes] # یه instance میسازه و ارسالش مکنه.
+            return [permissions.AllowAny()]
+
+    # -----------------------------------
+    # POST پیام جدید
+    # -----------------------------------
+    def create(self, request):
+        serializer = ContactUsMessageSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    # -----------------------------------
+    # GET اطلاعات سایت و شبکه‌ها
+    # -----------------------------------
+    def list(self, request):
+        site_settings = SiteGlobalSetting.objects.first()
+        social_media = SocialMediaSetting.objects.all()
+
+        site_serializer = SiteGlobalSettingSerializer(site_settings)
+        social_serializer = SocialMediaSettingSerializer(social_media, many=True)
+
+        return Response({
+            "site_global": site_serializer.data,
+            "social_media": social_serializer.data
+        })
+
+    # -----------------------------------
+    # GET تمام پیام‌ها برای ادمین
+    # -----------------------------------
+    @action(detail=False, methods=['get'], url_path='messages', url_name='messages')
+    def list_messages(self, request):
+        messages = ContactUsMessages.objects.all().order_by('-created')
+        serializer = ContactUsMessageSerializer(messages, many=True)
+        return Response(serializer.data)

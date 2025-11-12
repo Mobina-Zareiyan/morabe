@@ -36,3 +36,6 @@ class FAQSerializer(serializers.ModelSerializer):
             "created",
             "updated",
         ]
+
+
+

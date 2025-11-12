@@ -3,14 +3,14 @@ from django.contrib import admin
 
 # Local
 from utils.admin import DateTimeAdminMixin
-from .models import SiteGlobalSetting
+from .models import SiteGlobalSetting, SocialMediaSetting
 
 
 @admin.register(SiteGlobalSetting)
 class SiteGlobalSettingAdmin(admin.ModelAdmin):
     list_display = ('address_short', 'created', 'updated',)
     fieldsets = (
-        (None, {'fields': ('address', 'map',)}),
+        ('ارتباط با ما', {'fields': ('address', 'map', 'email', 'phone', )}),
         *DateTimeAdminMixin.fieldsets,
     )
     readonly_fields = (*DateTimeAdminMixin.readonly_fields,)
@@ -28,3 +28,12 @@ class SiteGlobalSettingAdmin(admin.ModelAdmin):
         if SiteGlobalSetting.objects.exists():
             return False
         return True
+
+
+
+@admin.register(SocialMediaSetting)
+class SocialMediaSettingAdmin(admin.ModelAdmin):
+    readonly_fields = (*DateTimeAdminMixin.readonly_fields,)
+    list_display = ('name',)
+    search_fields = ('name',)
+
