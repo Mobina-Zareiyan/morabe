@@ -1,18 +1,33 @@
 from django.db import models
 
 from utils.models import AbstractDateTimeModel
+from seo.models import AbstractBaseSeoModel
 
+class Category(AbstractBaseSeoModel, AbstractDateTimeModel):
+    name = models.CharField(
+        max_length= 225,
+        unique= True,
+        verbose_name= 'نام دسته‌بندی'
+    )
 
-class Category(models.TextChoices):
-    REGISTRATION_AUTHENTICATION = "registration_auth", "ثبت‌نام و احراز هویت"
-    INVESTMENT = "investment", "سرمایه‌گذاری"
-    MARKET = "market", "بازار"
+    class Meta:
+        verbose_name = "دسته‌بندی"
+        verbose_name_plural = "دسته‌بندی‌ها"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def default_search_engine_title(self):
+        return self.name
 
 
 class FAQ(AbstractDateTimeModel):
-    category = models.CharField(
-        max_length=50,
-        choices=Category.choices,
+    category = models.ForeignKey(
+        'Category',
+        on_delete= models.CASCADE,
+        related_name="faqs",
         verbose_name="دسته‌بندی موضوع"
     )
     question = models.CharField(

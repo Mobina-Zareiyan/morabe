@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     'contact_us.apps.ContactUsConfig',
     'rules.apps.RulesConfig',
     'seo.apps.SeoConfig',
-    'questions.apps.QuestionConfig',
+    'questions.apps.QuestionsConfig',
+    'siteinfo.apps.SiteinfoConfig',
 
 
     # Third Party

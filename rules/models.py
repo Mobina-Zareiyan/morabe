@@ -39,6 +39,7 @@ class RuleItem(models.Model):
 
     class Meta:
         verbose_name = 'آیتم قانون'
+        verbose_name_plural = 'آیتم های قانون'
         ordering = ['order']
 
 
