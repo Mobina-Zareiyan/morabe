@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/rules/', include('rules.urls')),
     path('api/contact_us/', include('contact_us.urls')),
+    path('api/faqs/', include('questions.urls')),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name= 'schema'), name='swagger-ui'),
     path("ckeditor/", include("ckeditor_uploader.urls")),
