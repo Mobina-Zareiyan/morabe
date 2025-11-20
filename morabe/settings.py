@@ -34,11 +34,15 @@ INSTALLED_APPS = [
     'rules.apps.RulesConfig',
     'seo.apps.SeoConfig',
     'questions.apps.QuestionsConfig',
-    'siteinfo.apps.SiteinfoConfig',
+    'settings.apps.SettingsConfig',
+    'account.apps.AccountConfig',
+    'blog.apps.BlogConfig',
+
 
 
     # Third Party
     'rest_framework',
+    'rest_framework_simplejwt',
     'rest_framework.authtoken',
     'drf_spectacular',
     'imagekit',
@@ -58,7 +62,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'morabe.urls'
 
-
+AUTH_USER_MODEL = 'account.User'
 
 TEMPLATES = [
     {
@@ -145,9 +149,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES':[
-    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
-    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'DEFAULT_SCHEMA_CLASS' : 'drf_spectacular.openapi.AutoSchema',
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -156,8 +160,26 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
         'rest_framework.filters.SearchFilter',
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '10/min',
+        'user': '5/min',
+    },
     # 'DEFAULT_RENDERER_CLASSES':(
     #     'utils.renderers.CustomRenderer',
     # ),
-    "EXCEPTION_HANDLER": "utils.exceptions.custom_exception_handler"
+    #"EXCEPTION_HANDLER": "utils.exceptions.custom_exception_handler"
 }
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Tile Factory',
+    'DESCRIPTION': 'Tile Factory API Schema',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': r'/api/v1',
+
+}
+

@@ -5,7 +5,15 @@ from django.contrib import admin
 # Third Party
 from .jdatetime import standard_jalali_datetime_format, pretty_jalali_datetime_format
 
+# Python package
+from uuid import uuid4
 
+
+class AbstractUUIDModel(models.Model):
+    uuid = models.UUIDField(unique=True, default=uuid4, editable=False)
+
+    class Meta:
+        abstract = True
 
 
 

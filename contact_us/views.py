@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import ContactUsMessages
-from siteinfo.models import SiteGlobalSetting, SocialMediaSetting
+from settings.models import SiteGlobalSetting, SocialMediaSetting
 from .serializers import ContactUsMessageSerializer, SiteGlobalSettingSerializer, SocialMediaSettingSerializer
 
 class ContactUsViewSet(viewsets.ViewSet):

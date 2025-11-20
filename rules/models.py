@@ -12,7 +12,6 @@ class Rules(AbstractDateTimeModel, AbstractBaseSeoModel):
     title = models.CharField(
         max_length=255,
         verbose_name='عنوان ',
-
     )
 
     class Meta:

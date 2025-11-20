@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import ContactUsMessages
-from siteinfo.models import SiteGlobalSetting, SocialMediaSetting
+from settings.models import SiteGlobalSetting, SocialMediaSetting
 
 # ----------------------------------------
 # Serializer برای پیام‌های فرم Contact Us
