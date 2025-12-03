@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'settings.apps.SettingsConfig',
     'account.apps.AccountConfig',
     'blog.apps.BlogConfig',
+    'project.apps.ProjectConfig',
+    'contractor.apps.ContractorConfig',
+    'areas.apps.AreasConfig',
 
 
 

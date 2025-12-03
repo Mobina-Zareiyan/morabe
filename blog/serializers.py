@@ -4,7 +4,7 @@ from .models import Blog, BlogComment
 class BlogCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlogComment
-        fields = ('id', 'name', 'email', 'content', 'created')  # فقط اطلاعاتی که فرانت نیاز دارد
+        fields = ('id', 'name', 'email', 'content', 'created')
         read_only_fields = ('id', 'created')
 
 class BlogListSerializer(serializers.ModelSerializer):

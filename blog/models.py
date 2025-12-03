@@ -27,6 +27,11 @@ class Blog(AbstractDateTimeModel, AbstractBaseSeoModel):
         format='JPEG',
         options={'quality': 60}
     )
+    alt = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name='تگ آلت',
+    )
     banner_description = models.TextField(
         verbose_name= 'توضیحات بنر'
     )
@@ -66,8 +71,8 @@ class Blog(AbstractDateTimeModel, AbstractBaseSeoModel):
 
         if self.image and self.image_thumbnail:
             image = self.image_thumbnail.url
-        return image
-
+            return image
+        return None
 
 class BlogComment(AbstractDateTimeModel):
     blog = models.ForeignKey(
