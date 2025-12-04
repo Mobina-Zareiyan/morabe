@@ -34,7 +34,19 @@ class ProjectListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('id', 'title', 'province', 'city', 'profit_to_date', 'invest_start_from', 'estimated_completion_date',
-                  'status', 'start_date', )
+                  'status', 'start_date', 'is_featured' )
+
+
+
+class ContractProjectListSerializer(serializers.ModelSerializer):
+    status = ProjectStatusSerializer(read_only=True)
+
+    class Meta:
+        model = Project
+        fields = ('id', 'title', 'province', 'city', 'profit_to_date', 'invest_start_from', 'estimated_completion_date',
+                  'status', 'start_date', 'is_featured', 'contractors')
+
+
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -45,8 +57,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'title', 'province', 'city', 'usage_type', 'profit_to_date', 'invest_start_from', 'contractor',
+        fields = ('id', 'title', 'province', 'city', 'usage_type', 'profit_to_date', 'invest_start_from', 'contractors',
                   'floor_count', 'unit_count', 'usable_area', 'status', 'estimated_completion_date', 'start_date',
-                  'project_details', 'address', 'map', 'price_per_metr', 'total_area', 'complete_area', 'bedroom_count',
+                  'project_details', 'address', 'map', 'price_per_meter', 'total_area', 'complete_area', 'bedroom_count',
                   'parking_count', 'warehouse_count', 'gallery', 'progress_reports', 'documents')
         read_only_fields = ('id', 'created')

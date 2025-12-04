@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'project.apps.ProjectConfig',
     'contractor.apps.ContractorConfig',
     'areas.apps.AreasConfig',
+    'investments.apps.InvestmentsConfig',
 
 
 

@@ -43,9 +43,9 @@ class ProjectDocumentsInline(admin.TabularInline):
 class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
     list_display = (
         'title', 'province', 'city', 'usage_type',
-        'contractor', 'status', 'price_per_meter',
+        'get_contractors', 'status', 'price_per_meter',
         'created',  # از AbstractDateTimeModel
-        'page_display_status',
+        'page_display_status', 'is_featured'
     )
 
     list_filter = (
@@ -53,10 +53,10 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
         'city',
         'usage_type',
         'status',
-        'contractor',
+        'contractors',
     )
 
-    search_fields = ('title', 'address', 'contractor__name')
+    search_fields = ('title', 'address', 'contractors__name')
 
     readonly_fields = (
         *DateTimeAdminMixin.readonly_fields,
@@ -67,9 +67,10 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
         (None, {
             'fields': (
                 'title',
-                'contractor',
+                'contractors',
                 'usage_type',
                 'status',
+                'is_featured',
             )
         }),
 
@@ -131,6 +132,15 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
         ProjectDocumentsInline,
     ]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        # اینجا همه سازندگان پروژه‌ها را یکجا لود می‌کنه و جلوی N+1 می‌گیره
+        return qs.prefetch_related('contractors')
+
+    def get_contractors(self, obj):
+        return ", ".join([c.name for c in obj.contractors.all()])
+
+    get_contractors.short_description = 'سازندگان'
 
 # ---------------------------------------------------------
 # ProjectStatus Admin

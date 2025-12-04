@@ -7,6 +7,7 @@ from django.core.validators import FileExtensionValidator, ValidationError
 from utils.models import AbstractDateTimeModel
 from seo.models import AbstractBaseSeoModel
 from areas.models import Province, City
+from account.models import User
 
 
 # Third-party
@@ -54,10 +55,9 @@ class Project(AbstractDateTimeModel, AbstractBaseSeoModel):
         help_text= 'تومان',
         verbose_name='مبلغ شروع سرمایه گذاری'
     )
-    contractor = models.ForeignKey(
+    contractors = models.ManyToManyField(
         'contractor.Contractor',
         related_name= 'projects',
-        on_delete = models.CASCADE,
         verbose_name='سازنده'
     )
     floor_count = models.PositiveIntegerField(
@@ -134,6 +134,19 @@ class Project(AbstractDateTimeModel, AbstractBaseSeoModel):
         blank=True,
         verbose_name= 'تعداد انباری'
     )
+    is_featured = models.BooleanField(
+        default=False,
+        verbose_name="نمایش در صفحه اصلی؟"
+    )
+    total_budget = models.PositiveIntegerField(
+        verbose_name="بودجه کل پروژه",
+        help_text="حداکثر سرمایه مورد نیاز برای پروژه (تومان)"
+    )
+    current_funding = models.PositiveIntegerField(
+        default=0,
+        verbose_name="سرمایه فعلی جمع‌آوری شده",
+        help_text="مقدار سرمایه‌ای که تاکنون جمع شده"
+    )
 
 
 
@@ -154,6 +167,8 @@ class Project(AbstractDateTimeModel, AbstractBaseSeoModel):
 
     def __str__(self):
         return self.title
+
+
 
 
 
@@ -178,7 +193,7 @@ class Gallery(AbstractDateTimeModel):
     )
     image = models.ImageField(
         max_length=255,
-        upload_to='projects/gallery/%y/%m/%d/',
+        upload_to='projects/gallery/%Y/%m/%d/',
         verbose_name= 'تصویر',
     )
     image_thumbnail = ImageSpecField(

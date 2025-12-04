@@ -24,7 +24,9 @@ api_v1_urlpatterns = [
     # Contact Us
     path('contact-us/', include('contact_us.urls', namespace='contact_us')),
     # Project
-#    path('project/', include('project.urls', namespace='project')),
+    path('project/', include('project.urls', namespace='project')),
+    # Contractor
+    path('contractor/', include('contractor.urls', namespace='contractor')),
 ]
 
 urlpatterns = [
