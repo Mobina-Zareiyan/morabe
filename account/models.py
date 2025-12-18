@@ -86,7 +86,7 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
     "last_name",
     "date_birth",
     "national_code",
-]
+    ]
     objects = UserManager()
 
     class Meta:
@@ -103,3 +103,21 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
 
     def is_admin(self):
         return self.is_superuser and self.is_staff
+
+
+
+class UserWallet(models.Model):
+    user = models.OneToOneField(
+        User,
+        related_name="wallet",
+        on_delete=models.CASCADE
+    )
+    balance = models.PositiveIntegerField(
+        default=0,
+        verbose_name="موجودی کیف پول"
+    )
+
+    def __str__(self):
+        return f"{self.user.fullname} - {self.balance} تومان"
+
+

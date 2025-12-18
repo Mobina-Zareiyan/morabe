@@ -1,7 +1,6 @@
 import string
 import random
 from django.contrib.auth.models import BaseUserManager
-from django.db.models.utils import make_model_tuple
 
 
 # -----------------------------

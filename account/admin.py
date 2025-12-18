@@ -7,7 +7,6 @@ from seo.admin import AbstractBaseSeoModel, MetadataModel
 
 
 
-
 admin.site.unregister(Group)
 
 # -----------------------------
@@ -72,4 +71,4 @@ class UserAdmin(admin.ModelAdmin):
     ordering = ('-created',)
 
     # اضافه کردن Inlineها
-    inlines = ( ReferralInline,)
+    inlines = ( ReferralInline, )

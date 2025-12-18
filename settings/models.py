@@ -28,6 +28,25 @@ class SiteGlobalSetting(AbstractDateTimeModel):
         blank=True,
         verbose_name='شماره تلفن'
     )
+    fee_percent = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=0,
+        verbose_name="درصد کارمزد"
+    )
+
+    tax_percent = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=0,
+        verbose_name="درصد مالیات"
+    )
+    investment_pending_expire_minutes = models.PositiveIntegerField(
+        default=15,
+        verbose_name="مدت زمان اعتبار پرداخت (دقیقه)",
+        help_text="مدت زمانی که کاربر برای پرداخت سرمایه‌گذاری فرصت دارد"
+    )
+
 
     class Meta:
         verbose_name = 'پیکربندی سایت'
