@@ -27,7 +27,7 @@ Tech Stack
 
 Backend: Python & Django REST Framework (DRF)
 
-Database: SQLite or PostgreSQL
+Database: PostgreSQL
 
 Authentication: JWT / Token-based
 
