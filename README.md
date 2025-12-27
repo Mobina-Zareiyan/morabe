@@ -1,43 +1,40 @@
 Morabe – Real Estate Investment Platform
 
-Morabe is a Django-based backend platform that enables users to invest in construction projects with flexibility. Admins can register projects that need funding, and users can purchase land in any quantity, even less than one square meter, based on their financial capacity. Investments generate digital assets that can later be sold to other users at prices approved by the admin.
+Welcome to Morabe!
+Morabe is a platform designed to make investing in construction projects easy and flexible. Admins can register projects that need funding, and users can invest in land in any amount they want—even less than one square meter. Every investment generates digital assets, which can later be sold to other users at prices approved by the admin.
 
-Features
+What You Can Do on Morabe
 
-User Registration & Authentication
-Users must register and complete identity verification by uploading a short video of themselves. The admin approves each user before they can make purchases.
+Register and Verify Your Identity
+Sign up, upload a short video for identity verification, and wait for the admin to approve your account. Once approved, you can start investing and trading.
 
-Admin Panel
-A fully functional admin panel allows admins to manage projects, verify users, and upload progress updates (photos, area completed, supervisors, etc.).
+Invest in Land Easily
+Buy land in small or large amounts depending on your budget. The platform allows everyone to participate, even with minimal investment.
 
-Flexible Land Investment
-Users can invest any amount in available projects, with a minimum purchase price that allows participation even with small budgets.
+Manage Your Digital Assets
+Every investment gives you digital assets representing your land. You can sell parts of these assets to other users at admin-approved prices.
 
-Digital Asset Management
-After investment, users receive digital assets representing their purchased land. They can sell portions of these assets to other users at prices approved by the admin.
+Keep Track of Projects
+Admins regularly update project progress with photos, completed area, supervisors, and more. You can see the progress of the projects you invest in.
 
-Real-Time Updates
-Transactions and asset ownership are updated in real-time. Project progress is periodically updated by the admin.
+Use Your Wallet & Payment Gateway
+Each user has a personal wallet. You can top it up using the ZarinPal payment gateway and pay for your investments directly.
 
-Integrated Wallet & Payment Gateway
-Each user has a personal wallet that can be topped up via the ZarinPal payment gateway to facilitate land purchases.
+Collaboration with Architecture Companies
+Architecture companies can request to join Morabe. The admin can invite selected companies to contribute and collaborate on projects.
 
 Tech Stack
 
 Backend: Python & Django REST Framework (DRF)
 
-Database: SQLite/PostgreSQL (configurable)
+Database: SQLite or PostgreSQL
 
 Authentication: JWT / Token-based
 
 Payment Gateway: ZarinPal
 
-Note: Frontend development is planned separately and is not included in this repository yet
+Note: Frontend development is planned separately and is not included in this repository yet.
 
-Project Status
+Current Status
 
-Currently, the project backend is under development. Only the DRF backend is implemented; frontend development will be completed separately. The features described above represent the planned full functionality.
-
-Contribution
-
-This project is under active development. Contributions are welcome from developers familiar with Django REST Framework.
+Morabe is actively under development. Right now, the backend (DRF) is functional, while the frontend will be developed separately. The features listed above represent the vision for the final product.
