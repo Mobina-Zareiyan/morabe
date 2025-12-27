@@ -3,8 +3,9 @@ from rest_framework import serializers
 
 # Local Modules
 from project.models import Project
-from .models import Investment
-from .services import get_investment_expire_datetime, calculate_investment_amounts
+from .models import Investment, InvestmentSale
+from .services import (get_investment_expire_datetime, calculate_investment_amounts,
+                       calculate_investment_by_amount, create_investment_sale)
 
 
 
@@ -19,12 +20,20 @@ class InvestmentQuoteSerializer(serializers.Serializer):
         )
 
 
-
-
 class InvestmentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investment
         fields = ("project", "area")
+
+    def validate(self, attrs):
+        project = attrs["project"]
+        area = attrs["area"]
+
+        # بررسی ظرفیت باقی‌مانده پروژه
+        amounts = calculate_investment_amounts(project=project, area=area)
+        if not amounts:
+            raise serializers.ValidationError("مشکلی در محاسبات سرمایه‌گذاری پیش آمد")
+        return attrs
 
     def create(self, validated_data):
         user = self.context["request"].user
@@ -52,8 +61,6 @@ class InvestmentCreateSerializer(serializers.ModelSerializer):
 
 
 
-
-
 class InvestmentDetailSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source="project.title", read_only=True)
 
@@ -70,7 +77,75 @@ class InvestmentDetailSerializer(serializers.ModelSerializer):
             "total_payment",
             "status",
             "created",
+            "sold_area",
+            "locked_area",
+
         )
+
+
+
+class InvestmentSaleQuoteSerializer(serializers.Serializer):
+    investment = serializers.PrimaryKeyRelatedField(
+        queryset=Investment.objects.filter(status="paid")
+    )
+    base_amount = serializers.IntegerField(min_value=1)
+
+    def validate(self, data):
+        return calculate_investment_by_amount(
+            investment=data["investment"],
+            base_amount=data["base_amount"]
+        )
+
+
+
+
+class InvestmentSaleCreateSerializer(serializers.ModelSerializer):
+    investment = serializers.PrimaryKeyRelatedField(
+        queryset=Investment.objects.filter(status="paid")
+    )
+
+    class Meta:
+        model = InvestmentSale
+        fields = ("investment", "base_amount")
+    def validate(self, attrs):
+        request = self.context["request"]
+        investment = attrs["investment"]
+        base_amount = attrs.get("base_amount")
+
+        # 1. مالک بودن
+        if investment.user != request.user:
+            raise serializers.ValidationError("شما مالک این سرمایه‌گذاری نیستید")
+
+        # 2. وضعیت investment
+        if investment.status != "paid":
+            raise serializers.ValidationError("فقط سرمایه‌گذاری‌های پرداخت‌شده قابل فروش هستند")
+
+        # 3. دارایی قابل فروش
+        if investment.remaining_area <= 0:
+            raise serializers.ValidationError("دارایی قابل فروش وجود ندارد")
+
+        # 4. اعتبارسنجی base_amount
+        amounts = calculate_investment_by_amount(
+            investment=investment,
+            base_amount=base_amount
+        )
+
+        if amounts["area"] > investment.remaining_area:
+            raise serializers.ValidationError("مقدار وارد شده بیش از دارایی قابل فروش است")
+
+        # اضافه کردن مقادیر محاسبه‌شده به attrs برای create
+        attrs.update(amounts)
+        return attrs
+
+    def create(self, validated_data):
+        request = self.context["request"]
+
+        return create_investment_sale(
+            seller=request.user,
+            investment=validated_data["investment"],
+            amounts=validated_data["_amounts"]
+        )
+
 
 
 

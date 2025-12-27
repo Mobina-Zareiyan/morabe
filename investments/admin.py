@@ -1,6 +1,5 @@
-# investment/admin.py
 from django.contrib import admin
-from .models import Investment
+from .models import Investment, InvestmentSale
 from utils.admin import DateTimeAdminMixin
 
 
@@ -46,6 +45,8 @@ class InvestmentAdmin(admin.ModelAdmin):
         "status",
         "created",
         "updated",
+        "locked_area",
+        "sold_area",
         *DateTimeAdminMixin.readonly_fields,
     )
 
@@ -88,4 +89,102 @@ class InvestmentAdmin(admin.ModelAdmin):
         return False
 
     def has_delete_permission(self, request, obj=None):
+        return False
+
+
+
+
+
+
+@admin.register(InvestmentSale)
+class InvestmentSaleAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "investment_info",
+        "seller_fullname",
+        "buyer_fullname",
+        "selling_area",
+        "sold_area",
+        "price_per_meter",
+        "base_amount",
+        "total_payment",
+        "status",
+        "created",
+    )
+
+    list_filter = (
+        "status",
+        "investment__project",
+        "created",
+    )
+
+    search_fields = (
+        "investment__project__title",
+        "seller__first_name",
+        "seller__last_name",
+        "seller__mobile_number",
+        "buyer__first_name",
+        "buyer__last_name",
+        "buyer__mobile_number",
+    )
+
+    ordering = ("-created",)
+
+    readonly_fields = (
+        "investment",
+        "seller",
+        "buyer",
+        "selling_area",
+        "sold_area",
+        "price_per_meter",
+        "base_amount",
+        "fee_amount",
+        "tax_amount",
+        "total_payment",
+        "status",
+        "created",
+        "updated",
+        *DateTimeAdminMixin.readonly_fields,
+    )
+
+    fieldsets = (
+        ("اطلاعات فروش", {
+            "fields": ("investment", "seller", "buyer")
+        }),
+        ("جزئیات متراژ", {
+            "fields": ("selling_area", "sold_area", "price_per_meter")
+        }),
+        ("جزئیات مالی", {
+            "fields": ("base_amount", "fee_amount", "tax_amount", "total_payment")
+        }),
+        ("وضعیت", {
+            "fields": ("status",)
+        }),
+        ("زمان‌ها", {
+            "fields": ("created", "updated")
+        }),
+        *DateTimeAdminMixin.fieldsets,
+    )
+
+    # نمایش اطلاعات سرمایه‌گذاری مرتبط
+    def investment_info(self, obj):
+        return f"{obj.investment} | پروژه: {obj.investment.project.title}"
+    investment_info.short_description = "سرمایه‌گذاری"
+
+    # نمایش نام فروشنده
+    def seller_fullname(self, obj):
+        return obj.seller.fullname if obj.seller else "-"
+    seller_fullname.short_description = "فروشنده"
+
+    # نمایش نام خریدار
+    def buyer_fullname(self, obj):
+        return obj.buyer.fullname if obj.buyer else "-"
+    buyer_fullname.short_description = "خریدار"
+
+    def has_add_permission(self, request):
+        # جلوگیری از ایجاد دستی
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        # جلوگیری از حذف دستی
         return False

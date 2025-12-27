@@ -1,18 +1,19 @@
 # Django Module
 from django.db import models
-from django.apps import apps
 from django.core.validators import FileExtensionValidator, ValidationError
+from django.db.models import Sum
+
 
 # Local Module
 from utils.models import AbstractDateTimeModel
 from seo.models import AbstractBaseSeoModel
 from areas.models import Province, City
-from account.models import User
 
 
 # Third-party
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
+from decimal import Decimal
 from ckeditor.fields import RichTextField
 
 
@@ -147,6 +148,26 @@ class Project(AbstractDateTimeModel, AbstractBaseSeoModel):
         verbose_name="سرمایه فعلی جمع‌آوری شده",
         help_text="مقدار سرمایه‌ای که تاکنون جمع شده"
     )
+    investable_area = models.DecimalField(
+        max_digits=14,
+        decimal_places=6,
+        verbose_name="متراژ قابل سرمایه‌گذاری"
+    )
+    # multiplier = models.PositiveIntegerField(
+    #     default= 0,
+    #     verbose_name= 'ماکزیمم قیمت فروش',
+    # )
+
+    @property
+    def sold_area(self):
+        result = self.investments.filter(
+            status="paid"
+        ).aggregate(total=Sum("area"))["total"]
+        return result or Decimal("0")
+
+    @property
+    def remaining_area(self):
+        return self.investable_area - self.sold_area
 
 
 
