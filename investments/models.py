@@ -185,6 +185,11 @@ class InvestmentSale(AbstractDateTimeModel):
     def remaining_area(self):
         return self.selling_area - self.sold_area
 
+
+    class Meta:
+        verbose_name = "فروش سرمایه‌گذاری"
+        verbose_name_plural = "فروش سرمایه‌گذاری‌ها"
+
     def __str__(self):
         return f"{self.investment} | {self.seller}  | {self.status} "
 
