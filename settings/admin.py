@@ -11,6 +11,7 @@ class SiteGlobalSettingAdmin(admin.ModelAdmin):
     list_display = ('address_short', 'created', 'updated',)
     fieldsets = (
         ('ارتباط با ما', {'fields': ('address', 'map', 'email', 'phone', )}),
+        (None, {'fields': ('fee_percent', 'tax_percent', 'investment_pending_expire_minutes')}),
         *DateTimeAdminMixin.fieldsets,
     )
     readonly_fields = (*DateTimeAdminMixin.readonly_fields,)

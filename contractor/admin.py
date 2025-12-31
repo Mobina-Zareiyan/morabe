@@ -41,7 +41,7 @@ class ContractorAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            "fields": ("name", "subtitle", "description", "is_featured")
+            "fields": ("name", "subtitle", "description", "successful_project", "work_experience", "is_featured",)
         }),
         ("تصویر", {
             "fields": ("image", "alt", "image_preview")
