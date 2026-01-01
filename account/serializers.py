@@ -3,7 +3,6 @@ from account.models import User
 from django.contrib.auth.password_validation import validate_password
 from .validators import (validate_mobile_number, validate_national_code, validate_national_code_unique,
                          validate_referral_code)
-from django.core.exceptions import ValidationError
 
 
 class RegisterSerializer(serializers.ModelSerializer):

@@ -15,6 +15,7 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
     """
     This models inherits from django base user.
     """
+    # اگه این نباشه جنگو پیش فرض از اعداد ترتیبی استفادهه میکنه
     uuid = models.UUIDField(unique=True, default=_uuid.uuid4, editable=False)
     first_name = models.CharField(
         max_length=200,
@@ -107,17 +108,4 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
 
 
 class UserWallet(models.Model):
-    user = models.OneToOneField(
-        User,
-        related_name="wallet",
-        on_delete=models.CASCADE
-    )
-    balance = models.PositiveIntegerField(
-        default=0,
-        verbose_name="موجودی کیف پول"
-    )
-
-    def __str__(self):
-        return f"{self.user.fullname} - {self.balance} تومان"
-
-
+    pass

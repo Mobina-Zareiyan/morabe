@@ -27,6 +27,9 @@ api_v1_urlpatterns = [
     path('project/', include('project.urls', namespace='project')),
     # Contractor
     path('contractor/', include('contractor.urls', namespace='contractor')),
+    # Investment
+    path('investments/', include('investments.urls', namespace='investments')),
+
 ]
 
 urlpatterns = [

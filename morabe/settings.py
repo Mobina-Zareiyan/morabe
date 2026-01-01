@@ -179,8 +179,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Tile Factory',
-    'DESCRIPTION': 'Tile Factory API Schema',
+    'TITLE': 'Morabe',
+    'DESCRIPTION': 'Morabe API Schema',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'SCHEMA_PATH_PREFIX': r'/api/v1',

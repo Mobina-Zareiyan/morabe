@@ -4,6 +4,7 @@
 
 def send_normal_sms(mobiles, message_text):
 
+    # چک برا لیست بودن برا api
     if isinstance(mobiles, str):
         mobiles = [mobiles]
 

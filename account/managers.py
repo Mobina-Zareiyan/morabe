@@ -7,6 +7,7 @@ from django.contrib.auth.models import BaseUserManager
 #   تابع تولید کد معرف یکتا
 # -----------------------------
 def generate_referral_code(length=8):
+    # اینجا import رو انجام میدم که نیوفته تو حلقه
     from .models import User
     chars = string.ascii_uppercase + string.digits
     while True:
