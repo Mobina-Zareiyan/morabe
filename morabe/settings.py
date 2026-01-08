@@ -187,3 +187,9 @@ SPECTACULAR_SETTINGS = {
 
 }
 
+
+
+ZARINPAL_REQUEST_URL = "https://api.zarinpal.com/pg/v4/payment/request.json"
+ZARINPAL_START_PAY_URL = "https://www.zarinpal.com/pg/StartPay/"
+ZARINPAL_VERIFY_URL = "https://api.zarinpal.com/pg/v4/payment/verify.json"
+
