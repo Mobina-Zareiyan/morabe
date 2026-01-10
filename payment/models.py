@@ -180,7 +180,8 @@ class WithdrawRequest(AbstractDateTimeModel):
 
 class SuggestedDepositAmount(AbstractDateTimeModel):
     amount = models.PositiveBigIntegerField(
-        verbose_name="مبلغ پیشنهادی"
+        verbose_name="مبلغ پیشنهادی",
+        help_text= "تومان",
     )
     is_active = models.BooleanField(
         default=True,

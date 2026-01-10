@@ -10,7 +10,7 @@ from decimal import Decimal, ROUND_DOWN
 from settings.models import SiteGlobalSetting
 
 # Local Module
-from account.models import UserWallet
+from payment.models import Wallet
 from project.models import Project
 from .models import Investment , InvestmentSale
 from account.models import User
@@ -32,7 +32,7 @@ def pay_investment(investment):
     # الان سیستم کاملا ضد race شد
     investment = Investment.objects.select_for_update().get(pk=investment.pk)
     project = Project.objects.select_for_update().get(pk=investment.project_id)
-    wallet = UserWallet.objects.select_for_update().get(user=investment.user)
+    wallet = Wallet.objects.select_for_update().get(user=investment.user)
 
     if investment.status != "pending":
         raise ValidationError("این سفارش قبلاً تعیین وضعیت شده است")
@@ -206,8 +206,8 @@ def pay_investment_sale(sale: InvestmentSale, buyer: User, purchase_area: Decima
     sale = InvestmentSale.objects.select_for_update().get(pk=sale.pk)
     investment = Investment.objects.select_for_update().get(pk=sale.investment_id)
 
-    buyer_wallet = UserWallet.objects.select_for_update().get(user=buyer)
-    seller_wallet = UserWallet.objects.select_for_update().get(user=sale.seller)
+    buyer_wallet = Wallet.objects.select_for_update().get(user=buyer)
+    seller_wallet = Wallet.objects.select_for_update().get(user=sale.seller)
 
     # 2. اعتبارسنجی
     if sale.status != "selling":
@@ -296,7 +296,7 @@ def cancel_investment_sale(sale: InvestmentSale):
     # 1. قفل رکوردها برای جلوگیری از race condition
     sale = InvestmentSale.objects.select_for_update().get(pk=sale.pk)
     investment = Investment.objects.select_for_update().get(pk=sale.investment_id)
-    seller_wallet = UserWallet.objects.select_for_update().get(user=sale.seller)
+    seller_wallet = Wallet.objects.select_for_update().get(user=sale.seller)
 
     # 2. بررسی وضعیت sale
     if sale.status != "selling":

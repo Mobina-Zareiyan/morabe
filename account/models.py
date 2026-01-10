@@ -80,6 +80,7 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
         related_name='referrals',
         verbose_name='معرف'
     )
+    # video = models.
 
     USERNAME_FIELD = 'mobile_number'
     REQUIRED_FIELDS = [
@@ -106,6 +107,3 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
         return self.is_superuser and self.is_staff
 
 
-
-class UserWallet(models.Model):
-    pass
