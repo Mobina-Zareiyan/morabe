@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'areas.apps.AreasConfig',
     'investments.apps.InvestmentsConfig',
     'payment.apps.PaymentConfig',
+    'home.apps.HomeConfig',
 
 
 
