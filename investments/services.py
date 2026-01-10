@@ -29,7 +29,7 @@ def get_investment_expire_datetime():
 
 @transaction.atomic
 def pay_investment(investment):
-    # الان سیستم کاملا ضد race شد
+    # الان سیستم کاملا ضد race شده
     investment = Investment.objects.select_for_update().get(pk=investment.pk)
     project = Project.objects.select_for_update().get(pk=investment.project_id)
     wallet = Wallet.objects.select_for_update().get(user=investment.user)
@@ -248,7 +248,7 @@ def pay_investment_sale(sale: InvestmentSale, buyer: User, purchase_area: Decima
     seller_wallet.balance += base_amount
     seller_wallet.save(update_fields=["balance"])
 
-    # (fee + tax اینجا می‌تواند به کیف پول سیستم برود)
+    # (fee + tax اینجا می‌تونه به کیف پول سیستم برود)
 
     # 5. آپدیت Sale
     sale.sold_area += purchase_area

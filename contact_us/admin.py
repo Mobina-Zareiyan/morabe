@@ -18,7 +18,7 @@ class ContactUsMessagesAdmin(admin.ModelAdmin):
     search_fields = ('full_name', 'email')
     readonly_fields = (*DateTimeAdminMixin.readonly_fields,)
     actions = ('change_checked_to_true', 'change_checked_to_false',)
-
+#   این چجوری کار میکنه؟؟؟
     @admin.action(description='تغییر به بررسی شده')
     def change_checked_to_true(modeladmin, request, queryset):
         queryset.update(is_checked=True)

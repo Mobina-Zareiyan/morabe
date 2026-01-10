@@ -12,16 +12,16 @@ class ContactUsViewSet(viewsets.ViewSet):
     - GET اطلاعات سایت و شبکه‌های اجتماعی
     """
 
-    def get_permissions(self):
-        if self.action == 'create':
-            return [permissions.AllowAny()]
-        elif self.action == 'list_messages':
-            return [permissions.IsAdminUser()]
-        else:
-            return [permissions.AllowAny()]
+    # def get_permissions(self):
+    #     if self.action == 'create':
+    #         return [permissions.AllowAny()]
+    #     elif self.action == 'list_messages':
+    #         return [permissions.IsAdminUser()]
+    #     else:
+    #         return [permissions.AllowAny()]
 
     # -----------------------------------
-    # POST پیام جدید
+    # POST برا پیام جدید
     # -----------------------------------
     def create(self, request):
         serializer = ContactUsMessageSerializer(data=request.data)
@@ -30,7 +30,7 @@ class ContactUsViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     # -----------------------------------
-    # GET اطلاعات سایت و شبکه‌ها
+    # GET برا اطلاعات سایت و شبکه‌ها
     # -----------------------------------
     def list(self, request):
         site_settings = SiteGlobalSetting.objects.first()
@@ -47,8 +47,8 @@ class ContactUsViewSet(viewsets.ViewSet):
     # -----------------------------------
     # GET تمام پیام‌ها برای ادمین
     # -----------------------------------
-    @action(detail=False, methods=['get'], url_path='messages', url_name='messages')
-    def list_messages(self, request):
-        messages = ContactUsMessages.objects.all().order_by('-created')
-        serializer = ContactUsMessageSerializer(messages, many=True)
-        return Response(serializer.data)
+    # @action(detail=False, methods=['get'], url_path='messages', url_name='messages')
+    # def list_messages(self, request):
+    #     messages = ContactUsMessages.objects.all().order_by('-created')
+    #     serializer = ContactUsMessageSerializer(messages, many=True)
+    #     return Response(serializer.data)

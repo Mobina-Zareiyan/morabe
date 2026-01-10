@@ -36,6 +36,7 @@ class UserManager(BaseUserManager):
 
         user.referral_code = generate_referral_code()
         user.set_password(password)
+        # بود و نبود این چه فرقی داره؟
         user.save(using=self._db)
         return user
 

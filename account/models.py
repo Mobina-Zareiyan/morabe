@@ -56,7 +56,7 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
         verbose_name= 'آدرس',
     )
     is_active = models.BooleanField(
-        default=True,
+        default=False,
         verbose_name='فعال',
     )
     is_superuser = models.BooleanField(
@@ -80,7 +80,7 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
         related_name='referrals',
         verbose_name='معرف'
     )
-    # video = models.
+    # video
 
     USERNAME_FIELD = 'mobile_number'
     REQUIRED_FIELDS = [
@@ -89,6 +89,8 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
     "date_birth",
     "national_code",
     ]
+
+    # ???
     objects = UserManager()
 
     class Meta:

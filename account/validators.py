@@ -40,6 +40,18 @@ def validate_mobile_number(value):
     return value
 
 
+def validate_mobile_number_alg(value):
+    """
+    اعتبارسنجی شماره موبایل ایران
+    """
+    pattern = r'^09\d{9}$'  # الگوی شماره موبایل ایران
+
+    if not re.match(pattern, value):
+        raise ValidationError("شماره موبایل معتبر نیست")
+
+    return value
+
+
 def validate_national_code_unique(value):
     validate_national_code(value)  # چک الگوریتم
     if User.objects.filter(national_code=value).exists():

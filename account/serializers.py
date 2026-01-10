@@ -2,10 +2,11 @@ from rest_framework import serializers
 from account.models import User
 from django.contrib.auth.password_validation import validate_password
 from .validators import (validate_mobile_number, validate_national_code, validate_national_code_unique,
-                         validate_referral_code)
+                         validate_referral_code, validate_mobile_number_alg)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    mobile_number = serializers.CharField(required= True, max_length=11, validators=[validate_mobile_number])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     referral_code = serializers.CharField(required=False, allow_blank=True, validators=[validate_referral_code])
     national_code = serializers.CharField(validators= [validate_national_code, validate_national_code_unique])
@@ -28,16 +29,16 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    mobile_number = serializers.CharField(max_length= 11, validators=[validate_mobile_number])
+    mobile_number = serializers.CharField(max_length= 11, validators=[validate_mobile_number_alg])
     password = serializers.CharField(write_only=True)
 
 
 class PasswordResetCheckSerializer(serializers.Serializer):
-    mobile_number = serializers.CharField(max_length= 11, validators=[validate_mobile_number])
+    mobile_number = serializers.CharField(max_length= 11, validators=[validate_mobile_number_alg])
 
 
 class PasswordResetSerializer(serializers.Serializer):
-    mobile_number = serializers.CharField(max_length= 11, validators=[validate_mobile_number])
+    mobile_number = serializers.CharField(max_length= 11, validators=[validate_mobile_number_alg])
     new_password = serializers.CharField(write_only=True, validators=[validate_password])
     new_password1 = serializers.CharField(write_only=True, validators=[validate_password])
 

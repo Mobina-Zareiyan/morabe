@@ -24,9 +24,7 @@ from project.serializers import ProjectListSerializer
 
 class FAQViewSet(viewsets.ViewSet):
     """
-    ViewSet برای API سوالات متداول:
-    - GET /api/faqs/           => دسته‌بندی‌ها و (اختیاری همه FAQ ها)
-    - GET /api/faqs/<slug>/    => FAQ های دسته مشخص
+     سوالات متداول
     """
 
     def list(self, request):

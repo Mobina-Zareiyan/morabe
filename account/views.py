@@ -53,8 +53,8 @@ class LoginView(generics.GenericAPIView):
         if not user:
             return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
-        if not user.is_active:
-            return Response({"detail": "User account is inactive"}, status=status.HTTP_403_FORBIDDEN)
+        # if not user.is_active:
+        #     return Response({"detail": "User account is inactive"}, status=status.HTTP_403_FORBIDDEN)
 
         refresh = RefreshToken.for_user(user)
         return Response({

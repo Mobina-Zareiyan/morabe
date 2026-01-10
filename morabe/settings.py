@@ -189,7 +189,7 @@ SPECTACULAR_SETTINGS = {
 
 }
 
-
+MEDIANA_API_KEY = ""
 
 ZARINPAL_REQUEST_URL = "https://api.zarinpal.com/pg/v4/payment/request.json"
 ZARINPAL_START_PAY_URL = "https://www.zarinpal.com/pg/StartPay/"

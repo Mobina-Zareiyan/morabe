@@ -1,7 +1,7 @@
-from django.shortcuts import render
+# Django Module
 from rest_framework import generics, permissions
 
-
+# Local Module
 from .models import Contractor, RegistrationContractor
 from .serializers import ContractorListSerializer, ContractorSerializer, RegistrationContractorSerializer
 
@@ -10,7 +10,7 @@ class ContractorListAPIView(generics.ListAPIView):
     queryset = Contractor.objects.all()
     serializer_class = ContractorListSerializer
 
-
+# کی از RetrieveAPIView استفاده میشه؟؟؟
 class ContractorDetailAPIView(generics.RetrieveAPIView):
     queryset = Contractor.objects.prefetch_related('projects', 'galleries')
     serializer_class = ContractorSerializer
