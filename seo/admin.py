@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
+from django.utils.translation import gettext_lazy as _
 
 from .models import AbstractBaseSeoModel, MetadataModel
 
@@ -17,7 +18,7 @@ class MetadataAdminInline(admin.TabularInline):
 
 class SeoAdminMixin(admin.ModelAdmin):
     fieldsets = (
-        ('گزینه های سئو', {
+        (_('گزینه های سئو'), {
             'fields': (
                 'slug',
                 'page_display_status',
@@ -34,11 +35,11 @@ class SeoAdminMixin(admin.ModelAdmin):
     list_editable = ('page_display_status',)
 
     # Actions
-    @admin.action(description='تغییر وضعیت نمایش به انتشار')
+    @admin.action(description= _('تغییر وضعیت نمایش به انتشار'))
     def make_published(modeladmin, request, queryset):
         queryset.update(page_display_status=AbstractBaseSeoModel.PUBLISH)
 
-    @admin.action(description='تغییر وضعیت نمایش به پیش نمایش')
+    @admin.action(description= _('تغییر وضعیت نمایش به پیش نمایش'))
     def make_drafted(modeladmin, request, queryset):
         queryset.update(page_display_status=AbstractBaseSeoModel.DRAFT)
 
@@ -47,7 +48,7 @@ class SeoAdminMixin(admin.ModelAdmin):
 
 class ContentAdminMixin(admin.ModelAdmin):
     fieldsets = (
-        ('توضیحات و محتوا', {
+        (_('توضیحات و محتوا'), {
             'fields': ('description', 'content',),
         }),
     )

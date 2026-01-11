@@ -1,12 +1,14 @@
 from django.contrib import admin
 from django.utils.html import mark_safe # اگه نیاز شد جایی از html استفاده کنیم نیازه که این باشه
+from django.utils.translation import gettext_lazy as _
+
 from seo.admin import SeoAdminMixin
 
 
 class DateTimeAdminMixin(admin.ModelAdmin):
     fields = ('jcreated', 'jupdated',)
     fieldsets = (
-        ('تاریخچه', {
+        (_('تاریخچه'), {
             'fields': ('jcreated', 'jupdated',)
         }),
     )
@@ -18,7 +20,7 @@ class DateTimeAdminMixin(admin.ModelAdmin):
 
 class StaticPageAdminMixin(admin.ModelAdmin):
     fieldsets = (
-        ('محتوا', {'fields': ('content',)}),
+        (_('محتوا'), {'fields': ('content',)}),
         *SeoAdminMixin.fieldsets,
         *DateTimeAdminMixin.fieldsets,
     )
@@ -34,10 +36,10 @@ class StaticPageAdminMixin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
-    @admin.display(description='صفحه', empty_value='-')
+    @admin.display(description= _('صفحه'), empty_value='-')
     def display_page_title(self, obj):
         return obj.__str__()
 
-    @admin.display(description='نمایش در وب گاه', empty_value='-')
+    @admin.display(description=_('نمایش در وب گاه'), empty_value='-')
     def display_page_in_site(self, obj):
         return mark_safe(f'<a target="_blank" href="{self.view_on_site(obj)}">نمایش</a>')

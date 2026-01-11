@@ -1,5 +1,7 @@
 # Django Built-in modules
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
 
 # Local apps
 from utils.models import AbstractDateTimeModel
@@ -9,22 +11,22 @@ class Province(AbstractDateTimeModel):
     name = models.CharField(
         max_length=255,
         unique=True,
-        verbose_name= 'نام',
+        verbose_name= _('نام'),
     )
     longitude = models.FloatField(
         null=True,
         blank=True,
-        verbose_name= 'طول',
+        verbose_name= _('طول'),
     )
     latitude = models.FloatField(
         null=True,
         blank=True,
-        verbose_name= 'عرض',
+        verbose_name= _('عرض'),
     )
 
     class Meta:
-        verbose_name =  'استان'
-        verbose_name_plural =  'استان ها'
+        verbose_name =  _('استان')
+        verbose_name_plural =  _('استان ها')
 
     def __str__(self):
         return self.name
@@ -34,27 +36,27 @@ class City(AbstractDateTimeModel):
     province = models.ForeignKey(
         Province,
         on_delete=models.CASCADE,
-        verbose_name= 'استان',
+        verbose_name= _('استان'),
     )
     name = models.CharField(
         max_length=255,
-        verbose_name= 'نام',
+        verbose_name= _('نام'),
     )
     longitude = models.FloatField(
         null=True,
         blank=True,
-        verbose_name= 'طول',
+        verbose_name= _('طول'),
     )
     latitude = models.FloatField(
         null=True,
         blank=True,
-        verbose_name= 'عرض',
+        verbose_name= _('عرض'),
     )
 
     class Meta:
         unique_together = ('province', 'name',)
-        verbose_name =  'شهر'
-        verbose_name_plural =  'شهر ها'
+        verbose_name =  _('شهر')
+        verbose_name_plural =  _('شهر ها')
 
     def __str__(self):
         return self.name

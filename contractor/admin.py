@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Contractor, Gallery, RegistrationContractor
+from django.utils.translation import gettext_lazy as _
+
 
 # ---------------------------------------------------------
 # Inline Models
@@ -9,14 +11,14 @@ class GalleryInline(admin.TabularInline):
     extra = 1
     fields = ("image_preview", "image", "title", "subtitle", "alt")
     readonly_fields = ("image_preview",)
-    verbose_name = "تصویر"
-    verbose_name_plural = "گالری‌ها"
+    verbose_name = _("تصویر")
+    verbose_name_plural = _("گالری‌ها")
 
     def image_preview(self, obj):
         if obj.image_thumbnail:
             return f'<img src="{obj.image_thumbnail.url}" width="150" height="84" />'
         return "-"
-    image_preview.short_description = "پیش‌نمایش"
+    image_preview.short_description = _("پیش‌نمایش")
     image_preview.allow_tags = True
 
 
@@ -43,7 +45,7 @@ class ContractorAdmin(admin.ModelAdmin):
         (None, {
             "fields": ("name", "subtitle", "description", "successful_project", "work_experience", "is_featured",)
         }),
-        ("تصویر", {
+        (_("تصویر"), {
             "fields": ("image", "alt", "image_preview")
         }),
     )
@@ -73,4 +75,4 @@ class RegistrationContractorAdmin(admin.ModelAdmin):
     def mark_as_checked(self, request, queryset):
         updated = queryset.update(is_checked=True)
         self.message_user(request, f"{updated} درخواست بررسی شد.")
-    mark_as_checked.short_description = "علامت زدن به عنوان بررسی شده"
+    mark_as_checked.short_description = _("علامت زدن به عنوان بررسی شده")

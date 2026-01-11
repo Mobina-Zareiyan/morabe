@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
+
 
 # Third Party Module
 from decimal import Decimal
@@ -54,7 +56,7 @@ class InvestmentPayAPIView(APIView):
         pay_investment(investment)
 
         return Response({
-            "detail": "پرداخت با موفقیت انجام شد"
+            "detail": _("پرداخت با موفقیت انجام شد")
         })
 
 
@@ -89,7 +91,7 @@ class InvestmentSalePayAPIView(APIView):
 
         pay_investment_sale(sale, buyer=request.user, purchase_area=purchase_area)
 
-        return Response({"detail": "پرداخت با موفقیت انجام شد"})
+        return Response({"detail": _("پرداخت با موفقیت انجام شد")})
 
 
 
@@ -114,7 +116,7 @@ class InvestmentSaleCancelAPIView(APIView):
             )
 
         return Response(
-            {"detail": "فروش با موفقیت لغو شد"}
+            {"detail": _("فروش با موفقیت لغو شد")}
         )
 
 

@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+
 
 from utils.admin import DateTimeAdminMixin
-from seo.admin import SeoAdminMixin        # اگر چنین میکسی نداری بگو تا برات بسازم
+from seo.admin import SeoAdminMixin
 from .models import (
     Project, ProjectStatus,
     Gallery, ProjectProgressReport,
@@ -17,22 +19,22 @@ class GalleryInline(admin.TabularInline):
     model = Gallery
     extra = 1
     fields = ("image", "alt")
-    verbose_name = "تصویر"
-    verbose_name_plural = "گالری پروژه"
+    verbose_name = _("تصویر")
+    verbose_name_plural = _("گالری پروژه")
 
 
 class ProjectProgressReportInline(admin.TabularInline):
     model = ProjectProgressReport
     extra = 1
-    verbose_name = "گزارش"
-    verbose_name_plural = "گزارش‌های پیشرفت"
+    verbose_name = _("گزارش")
+    verbose_name_plural = _("گزارش‌های پیشرفت")
 
 
 class ProjectDocumentsInline(admin.TabularInline):
     model = ProjectDocuments
     extra = 1
-    verbose_name = "سند"
-    verbose_name_plural = "اسناد پروژه"
+    verbose_name = _("سند")
+    verbose_name_plural = _("اسناد پروژه")
 
 
 # ---------------------------------------------------------
@@ -74,7 +76,7 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
             )
         }),
 
-        ('موقعیت', {
+        (_('موقعیت'), {
             'fields': (
                 'province',
                 'city',
@@ -83,7 +85,7 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
             )
         }),
 
-        ('متراژ و قیمت', {
+        (_('متراژ و قیمت'), {
             'fields': (
                 'price_per_meter',
                 'total_area',
@@ -92,7 +94,7 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
             )
         }),
 
-        ('مشخصات فیزیکی', {
+        (_('مشخصات فیزیکی'), {
             'fields': (
                 'floor_count',
                 'unit_count',
@@ -102,21 +104,24 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
             )
         }),
 
-        ('زمان‌بندی', {
+        (_('زمان‌بندی'), {
             'fields': (
                 'start_date',
                 'estimated_completion_date',
             )
         }),
 
-        ('سود و سرمایه‌گذاری', {
+        (_('سود و سرمایه‌گذاری'), {
             'fields': (
                 'profit_to_date',
                 'invest_start_from',
+                'total_budget',
+                'current_funding',
+                'investable_area',
             )
         }),
 
-        ('توضیحات', {
+        (_('توضیحات'), {
             'fields': ('project_details',)
         }),
 
@@ -140,7 +145,7 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
     def get_contractors(self, obj):
         return ", ".join([c.name for c in obj.contractors.all()])
 
-    get_contractors.short_description = 'سازندگان'
+    get_contractors.short_description = _('سازندگان')
 
 # ---------------------------------------------------------
 # ProjectStatus Admin

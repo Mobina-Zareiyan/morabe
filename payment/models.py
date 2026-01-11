@@ -1,6 +1,8 @@
 from django.db import models, transaction
 from account.models import User
 from utils.models import AbstractDateTimeModel
+from django.utils.translation import gettext_lazy as _
+
 
 
 class Wallet(AbstractDateTimeModel):
@@ -8,19 +10,19 @@ class Wallet(AbstractDateTimeModel):
         User,
         related_name="wallet",
         on_delete=models.PROTECT,
-        verbose_name="کاربر"
+        verbose_name= _("کاربر")
     )
     balance = models.BigIntegerField(
         default=0,
-        verbose_name="موجودی کل"
+        verbose_name= _("موجودی کل")
     )
     blocked_balance = models.BigIntegerField(
         default=0,
-        verbose_name="موجودی بلوکه شده"
+        verbose_name= _("موجودی بلوکه شده")
     )
     is_active = models.BooleanField(
         default=True,
-        verbose_name="فعال"
+        verbose_name= _("فعال")
     )
 
     @property
@@ -29,8 +31,8 @@ class Wallet(AbstractDateTimeModel):
         return self.balance - self.blocked_balance
 
     class Meta:
-        verbose_name = "کیف پول"
-        verbose_name_plural = "کیف پول ها"
+        verbose_name = _("کیف پول")
+        verbose_name_plural = _("کیف پول ها")
 
 
 
@@ -43,29 +45,29 @@ class CreditCard(AbstractDateTimeModel):
         User,
         on_delete=models.PROTECT,
         related_name="credit_cards",
-        verbose_name="کاربر",
+        verbose_name= _("کاربر"),
     )
     sheba_number = models.CharField(
         max_length=26,
-        verbose_name="شماره شبا",
+        verbose_name= _("شماره شبا"),
     )
     card_number = models.CharField(
         max_length=16,
-        verbose_name="شماره کارت",
+        verbose_name= _("شماره کارت"),
     )
     bank_name = models.CharField(
         max_length=50,
-        verbose_name="نام بانک"
+        verbose_name= _("نام بانک")
     )
     is_active = models.BooleanField(
         default= True,
-        verbose_name= "فعال",
+        verbose_name= _("فعال"),
     )
 
 
     class Meta:
-        verbose_name = "کارت اعتباری"
-        verbose_name_plural = "کارت های اعتباری"
+        verbose_name = _("کارت اعتباری")
+        verbose_name_plural = _("کارت های اعتباری")
 
 
     def __str__(self):
@@ -97,25 +99,25 @@ class Transaction(AbstractDateTimeModel):
     wallet = models.ForeignKey(
         Wallet,
         on_delete=models.PROTECT,
-        verbose_name="کیف پول",
+        verbose_name= _("کیف پول"),
     )
-    amount = models.BigIntegerField(verbose_name="مقدار")
+    amount = models.BigIntegerField(verbose_name= _("مقدار"))
     transaction_type = models.CharField(
         max_length=10,
         choices=TRANSACTION_TYPE_CHOICES,
-        verbose_name="نوع تراکنش"
+        verbose_name= _("نوع تراکنش")
     )
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
         default=PENDING,
-        verbose_name="وضعیت تراکنش"
+        verbose_name= _("وضعیت تراکنش")
     )
     reference_id = models.CharField(
         max_length=100,
         null=True,
         blank=True,
-        verbose_name="کد مرجع"
+        verbose_name= _("کد مرجع")
     )
     authority = models.CharField(
         max_length=255,
@@ -123,8 +125,8 @@ class Transaction(AbstractDateTimeModel):
     )
 
     class Meta:
-        verbose_name = "تراکنش"
-        verbose_name_plural = "تراکنش ها"
+        verbose_name = _("تراکنش")
+        verbose_name_plural = _("تراکنش ها")
 
     def __str__(self):
         return f"{self.transaction_type} - {self.amount}"
@@ -145,30 +147,32 @@ class WithdrawRequest(AbstractDateTimeModel):
     wallet = models.ForeignKey(
         Wallet,
         on_delete=models.PROTECT,
-        verbose_name="کیف پول",
+        verbose_name= _("کیف پول"),
     )
     bank_card = models.ForeignKey(
         CreditCard,
         on_delete=models.PROTECT,
-        verbose_name="کارت مقصد"
+        verbose_name= _("کارت مقصد")
     )
-    amount = models.BigIntegerField(verbose_name="مبلغ برداشت")
+    amount = models.BigIntegerField(
+        verbose_name= _("مبلغ برداشت")
+    )
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
         default=PENDING,
-        verbose_name="وضعیت"
+        verbose_name= _("وضعیت")
     )
     reviewed_at = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name="زمان بررسی"
+        verbose_name= _("زمان بررسی")
     )
 
 
     class Meta:
-        verbose_name = "درخواست برداشت"
-        verbose_name_plural = "درخواست های برداشت"
+        verbose_name = _("درخواست برداشت")
+        verbose_name_plural = _("درخواست های برداشت")
 
     def __str__(self):
         return f"{self.wallet.user} - {self.amount}"
@@ -180,17 +184,17 @@ class WithdrawRequest(AbstractDateTimeModel):
 
 class SuggestedDepositAmount(AbstractDateTimeModel):
     amount = models.PositiveBigIntegerField(
-        verbose_name="مبلغ پیشنهادی",
-        help_text= "تومان",
+        verbose_name= _("مبلغ پیشنهادی"),
+        help_text= _("تومان"),
     )
     is_active = models.BooleanField(
         default=True,
-        verbose_name="فعال"
+        verbose_name= _("فعال")
     )
 
     class Meta:
-        verbose_name = "مبلغ پیشنهادی"
-        verbose_name_plural = "مبلغ‌های پیشنهادی"
+        verbose_name = _("مبلغ پیشنهادی")
+        verbose_name_plural = _("مبلغ‌های پیشنهادی")
         ordering = ['amount']
 
     def __str__(self):

@@ -1,6 +1,8 @@
 # Django Module
 from django.db import models
 from django.db.models import Q, UniqueConstraint
+from django.utils.translation import gettext_lazy as _
+
 
 # Third Party Module
 from validators import ValidationError
@@ -16,59 +18,59 @@ class Investment(AbstractDateTimeModel):
         User,
         on_delete= models.PROTECT,
         related_name= 'investments',
-        verbose_name= 'کاربر',
+        verbose_name= _('کاربر'),
     )
     project = models.ForeignKey(
         Project,
         on_delete= models.PROTECT,
         related_name= 'investments',
-        verbose_name= 'پروژه'
+        verbose_name= _('پروژه')
     )
     area = models.DecimalField(
         max_digits= 14,
         decimal_places= 6,
-        verbose_name= 'مساحت'
+        verbose_name= _('مساحت')
     )
     price_per_meter = models.PositiveIntegerField(
-        verbose_name= 'قیمت هر متر'
+        verbose_name= _('قیمت هر متر')
     )
     base_amount = models.PositiveIntegerField(
-        verbose_name= 'مبلغ خرید'
+        verbose_name= _('مبلغ خرید')
     )
     fee_amount = models.PositiveIntegerField(
-        verbose_name= 'کارمزد'
+        verbose_name= _('کارمزد')
     )
     tax_amount = models.PositiveIntegerField(
-        verbose_name= 'مالیات'
+        verbose_name= _('مالیات')
     )
     total_payment = models.PositiveIntegerField(
-        verbose_name= 'مبلغ قابل پرداخت'
+        verbose_name= _('مبلغ قابل پرداخت')
     )
     status = models.CharField(
         max_length= 50,
         choices= (
-            ('pending', 'در انتظار پرداخت'),
-            ('paid', 'پرداخت شده'),
-            ('canceled', 'لغو شده'),
+            ('pending', _('در انتظار پرداخت')),
+            ('paid', _('پرداخت شده')),
+            ('canceled', _('لغو شده')),
         ),
         default = 'pending'
     )
     expires_at = models.DateTimeField(
         null= True,
         blank= True,
-        verbose_name= 'زمان انقضای پرداخت',
+        verbose_name= _('زمان انقضای پرداخت'),
     )
     sold_area = models.DecimalField(
         max_digits=14,
         decimal_places=6,
         default=0,
-        verbose_name='متراژ فروخته شده',
+        verbose_name= _('متراژ فروخته شده'),
     )
     locked_area = models.DecimalField(
         max_digits=14,
         decimal_places=6,
         default=0,
-        help_text="متراژی که در sale های فعال قفل شده"
+        help_text= _("متراژی که در sale های فعال قفل شده")
     )
 
 
@@ -88,8 +90,8 @@ class Investment(AbstractDateTimeModel):
                 name="unique_pending_investment"
             )
         ]
-        verbose_name = "سرمایه‌گذاری"
-        verbose_name_plural = "سرمایه‌گذاری‌ها"
+        verbose_name = _("سرمایه‌گذاری")
+        verbose_name_plural = _("سرمایه‌گذاری‌ها")
 
 
 
@@ -106,78 +108,78 @@ class InvestmentSale(AbstractDateTimeModel):
         Investment,
         on_delete= models.PROTECT,
         related_name= 'sales',
-        verbose_name= 'سرمایه گذاری مرجع'
+        verbose_name= _('سرمایه گذاری مرجع')
     )
     seller = models.ForeignKey(
         User,
         on_delete= models.PROTECT,
         related_name= 'sales',
-        verbose_name= 'فروشنده'
+        verbose_name= _('فروشنده')
     )
     buyer = models.ForeignKey(
         User,
         null= True,
         on_delete=models.PROTECT,
         related_name='purchases',
-        verbose_name='خریدار',
+        verbose_name= _('خریدار'),
     )
     price_per_meter = models.PositiveIntegerField(
-        verbose_name= 'قیمت هر متر',
+        verbose_name=  _('قیمت هر متر'),
     )
     selling_area = models.DecimalField(
         max_digits= 14,
         decimal_places= 6,
-        verbose_name= 'متراژ قابل فروش'
+        verbose_name= _('متراژ قابل فروش')
     )
     status = models.CharField(
         max_length= 50,
         choices= (
-            ('selling','در انتظار فروش'),
-            ('sold', 'فروخته شده'),
-            ('canceled', 'کنسل شده'),
+            ('selling',_('در انتظار فروش')),
+            ('sold', _('فروخته شده')),
+            ('canceled', _('کنسل شده')),
         ),
         default= 'selling'
     )
     sold_at = models.DateTimeField(
         null= True,
         blank= True,
-        verbose_name= 'تاریخ فروش',
+        verbose_name= _('تاریخ فروش'),
     )
     # مبلغی که خریدار وارد میکنه (محاسبه متراژ و ... برعهده منه)
     base_amount = models.PositiveIntegerField(
-        verbose_name= 'مبلغ خرید کاربر',
+        verbose_name= _('مبلغ خرید کاربر'),
     )
     sale_expires_at = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name='انقضای فروش'
+        verbose_name= _('انقضای فروش')
     )
     sold_area = models.DecimalField(
         max_digits= 14,
         decimal_places= 6,
         default= 0,
-        verbose_name= 'متراژ فروخته شده',
+        verbose_name= _('متراژ فروخته شده'),
     )
     fee_amount = models.PositiveIntegerField(
-        verbose_name='کارمزد'
+        verbose_name= _('کارمزد')
     )
     tax_amount = models.PositiveIntegerField(
-        verbose_name='مالیات'
+        verbose_name= _('مالیات')
     )
     total_payment = models.PositiveIntegerField(
-        verbose_name='مبلغ قابل پرداخت'
+        verbose_name= _('مبلغ قابل پرداخت')
     )
     expires_at = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name='زمان انقضای پرداخت',
+        verbose_name= _('زمان انقضای پرداخت'),
     )
 
 
     def clean(self):
         if self.sold_area and self.selling_area:
             if self.sold_area > self.selling_area:
-                raise ValidationError("متراژ فروخته شده نمی‌تواند از متراژ قابل فروش بیشتر باشد")
+                raise ValidationError(_("متراژ فروخته شده نمی‌تواند از متراژ قابل فروش بیشتر باشد"))
 
 
 
@@ -187,8 +189,8 @@ class InvestmentSale(AbstractDateTimeModel):
 
 
     class Meta:
-        verbose_name = "فروش سرمایه‌گذاری"
-        verbose_name_plural = "فروش سرمایه‌گذاری‌ها"
+        verbose_name = _("فروش سرمایه‌گذاری")
+        verbose_name_plural = _("فروش سرمایه‌گذاری‌ها")
 
     def __str__(self):
         return f"{self.investment} | {self.seller}  | {self.status} "

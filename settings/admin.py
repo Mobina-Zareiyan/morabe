@@ -1,5 +1,7 @@
 # Django Built-in
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+
 
 # Local
 from utils.admin import DateTimeAdminMixin
@@ -10,7 +12,7 @@ from .models import SiteGlobalSetting, SocialMediaSetting
 class SiteGlobalSettingAdmin(admin.ModelAdmin):
     list_display = ('address_short', 'created', 'updated',)
     fieldsets = (
-        ('ارتباط با ما', {'fields': ('address', 'map', 'email', 'phone', )}),
+        (_('ارتباط با ما'), {'fields': ('address', 'map', 'email', 'phone', )}),
         (None, {'fields': ('fee_percent', 'tax_percent', 'investment_pending_expire_minutes')}),
         *DateTimeAdminMixin.fieldsets,
     )
@@ -19,7 +21,7 @@ class SiteGlobalSettingAdmin(admin.ModelAdmin):
     def address_short(self, obj):
         """نمایش خلاصه‌ای از آدرس برای لیست ادمین"""
         return obj.address[:50] + '...' if obj.address and len(obj.address) > 50 else obj.address
-    address_short.short_description = "آدرس"
+    address_short.short_description = _("آدرس")
 
     def has_add_permission(self, request):
         """

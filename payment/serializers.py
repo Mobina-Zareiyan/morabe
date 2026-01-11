@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django.utils.translation import gettext_lazy as _
+
 from .models import CreditCard, SuggestedDepositAmount, Wallet
 
 
@@ -9,13 +11,13 @@ class WithdrawRequestSerializer(serializers.Serializer):
     def validate_bank_card_id(self, value):
         user = self.context['request'].user
         if not CreditCard.objects.filter(id=value, user=user).exists():
-            raise serializers.ValidationError("کارت انتخاب شده معتبر نیست.")
+            raise serializers.ValidationError(_("کارت انتخاب شده معتبر نیست."))
         return value
 
     def validate_amount(self, value):
         wallet = self.context['request'].user.wallet
         if value > wallet.available_balance:
-            raise serializers.ValidationError("موجودی کافی برای برداشت ندارید.")
+            raise serializers.ValidationError(_("موجودی کافی برای برداشت ندارید."))
         return value
 
 
@@ -24,7 +26,7 @@ class DepositSerializer(serializers.Serializer):
 
     def validate_amount(self, value):
         if value <= 0:
-            raise serializers.ValidationError("مبلغ باید بزرگتر از صفر باشد.")
+            raise serializers.ValidationError(_("مبلغ باید بزرگتر از صفر باشد."))
         return value
 
 
@@ -52,12 +54,12 @@ class CreditCardSerializer(serializers.ModelSerializer):
 
     def validate_card_number(self, value):
         if not value.isdigit() or len(value) != 16:
-            raise serializers.ValidationError("شماره کارت باید ۱۶ رقم باشد.")
+            raise serializers.ValidationError(_("شماره کارت باید ۱۶ رقم باشد."))
         return value
 
     def validate_sheba_number(self, value):
         if not value.startswith("IR") or len(value) != 26:
-            raise serializers.ValidationError("شماره شبا معتبر نیست.")
+            raise serializers.ValidationError(_("شماره شبا معتبر نیست."))
         return value
 
 

@@ -1,5 +1,7 @@
 # Django Built-in modules
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+
 
 # Local apps
 from .models import Province, City
@@ -11,7 +13,10 @@ from utils.admin import DateTimeAdminMixin
 class ProvinceAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('name',)}),
-        ('طول و عرض جغرافیایی', {'fields': ('longitude', 'latitude',)}),
+        (
+            _('طول و عرض جغرافیایی'),
+            {'fields': ('longitude', 'latitude',)}
+        ),
     )
     readonly_fields = (*DateTimeAdminMixin.readonly_fields,)
     list_display = ('name',)
@@ -22,7 +27,10 @@ class ProvinceAdmin(admin.ModelAdmin):
 class CityAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('province', 'name',)}),
-        ('طول و عرض جغرافیایی', {'fields': ('longitude', 'latitude',)}),
+        (
+            _('طول و عرض جغرافیایی'),
+            {'fields': ('longitude', 'latitude',)}
+        ),
     )
     readonly_fields = (*DateTimeAdminMixin.readonly_fields,)
     list_display = ('province', 'name',)

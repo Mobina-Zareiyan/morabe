@@ -1,5 +1,7 @@
 # Django built-in  Modules
 from rest_framework import serializers
+from django.utils.translation import gettext_lazy as _
+
 
 # Local Modules
 from project.models import Project
@@ -32,7 +34,7 @@ class InvestmentCreateSerializer(serializers.ModelSerializer):
         # بررسی ظرفیت باقی‌مانده پروژه
         amounts = calculate_investment_amounts(project=project, area=area)
         if not amounts:
-            raise serializers.ValidationError("مشکلی در محاسبات سرمایه‌گذاری پیش آمد")
+            raise serializers.ValidationError(_("مشکلی در محاسبات سرمایه‌گذاری پیش آمد"))
         return attrs
 
     def create(self, validated_data):
@@ -114,15 +116,15 @@ class InvestmentSaleCreateSerializer(serializers.ModelSerializer):
 
         # 1. مالک بودن
         if investment.user != request.user:
-            raise serializers.ValidationError("شما مالک این سرمایه‌گذاری نیستید")
+            raise serializers.ValidationError(_("شما مالک این سرمایه‌گذاری نیستید"))
 
         # 2. وضعیت investment
         if investment.status != "paid":
-            raise serializers.ValidationError("فقط سرمایه‌گذاری‌های پرداخت‌شده قابل فروش هستند")
+            raise serializers.ValidationError(_("فقط سرمایه‌گذاری‌های پرداخت‌شده قابل فروش هستند"))
 
         # 3. دارایی قابل فروش
         if investment.remaining_area <= 0:
-            raise serializers.ValidationError("دارایی قابل فروش وجود ندارد")
+            raise serializers.ValidationError(_("دارایی قابل فروش وجود ندارد"))
 
         # 4. اعتبارسنجی base_amount
         amounts = calculate_investment_by_amount(
@@ -131,7 +133,7 @@ class InvestmentSaleCreateSerializer(serializers.ModelSerializer):
         )
 
         if amounts["area"] > investment.remaining_area:
-            raise serializers.ValidationError("مقدار وارد شده بیش از دارایی قابل فروش است")
+            raise serializers.ValidationError(_("مقدار وارد شده بیش از دارایی قابل فروش است"))
 
         # اضافه کردن مقادیر محاسبه‌شده به attrs برای create
         attrs.update(amounts)

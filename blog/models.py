@@ -1,5 +1,6 @@
 # Django Module
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 # Third Party
 from ckeditor.fields import RichTextField
@@ -13,13 +14,13 @@ from seo.models import AbstractBaseSeoModel
 class Blog(AbstractDateTimeModel, AbstractBaseSeoModel):
     title= models.CharField(
         max_length= 225,
-        verbose_name= 'موضوع'
+        verbose_name= _('موضوع')
     )
     image = models.ImageField(
         null=True,
         blank=True,
         upload_to='blog/%y/%m/%d/',
-        verbose_name='تصویر',
+        verbose_name= _('تصویر'),
     )
     image_thumbnail = ImageSpecField(
         source='image',
@@ -30,25 +31,25 @@ class Blog(AbstractDateTimeModel, AbstractBaseSeoModel):
     alt = models.CharField(
         max_length=255,
         blank=True,
-        verbose_name='تگ آلت',
+        verbose_name= _('تگ آلت'),
     )
     banner_description = models.TextField(
-        verbose_name= 'توضیحات بنر'
+        verbose_name= _('توضیحات بنر')
     )
     full_description = RichTextField(
-        verbose_name= 'محتوا'
+        verbose_name= _('محتوا')
     )
     newest_blog = models.ManyToManyField(
         'self',
-        verbose_name= 'جدیدترین مطالب',
+        verbose_name= _('جدیدترین مطالب'),
         symmetrical=False,
         related_name= 'related_to',
         blank= True
     )
 
     class Meta:
-        verbose_name = 'پست'
-        verbose_name_plural = 'پست ها'
+        verbose_name = _('پست')
+        verbose_name_plural = _('پست ها')
         ordering = ('-created',)
 
     def __str__(self):
@@ -79,26 +80,26 @@ class BlogComment(AbstractDateTimeModel):
         Blog,
         on_delete=models.CASCADE,
         related_name='comments',
-        verbose_name='بلاگ'
+        verbose_name= _('بلاگ')
     )
     name = models.CharField(
         max_length=100,
-        verbose_name='نام'
+        verbose_name= _('نام')
     )
     email = models.EmailField(
-        verbose_name='ایمیل'
+        verbose_name= _('ایمیل')
     )
     content = models.TextField(
-        verbose_name='نظر'
+        verbose_name=_('نظر')
     )
     is_visible = models.BooleanField(
         default=False,
-        verbose_name='نمایش در صفحه'
+        verbose_name= _('نمایش در صفحه')
     )
 
     class Meta:
-        verbose_name = 'دیدگاه'
-        verbose_name_plural = 'دیدگاه‌ها'
+        verbose_name = _('دیدگاه')
+        verbose_name_plural = _('دیدگاه‌ها')
         ordering = ('-created',)
 
     def __str__(self):

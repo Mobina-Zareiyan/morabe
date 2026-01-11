@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Category, FAQ
+from django.utils.translation import gettext_lazy as _
+
 
 
 # -------------------------------
@@ -30,10 +32,10 @@ class CategoryAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
     fieldsets = (
-        ('اطلاعات اصلی', {
+        (_('اطلاعات اصلی'), {
             'fields': ('name', 'slug', 'page_display_status')
         }),
-        ('سئو', {
+        (_('سئو'), {
             'fields': (
                 'search_engine_title',
                 'search_engine_description',
@@ -41,7 +43,7 @@ class CategoryAdmin(admin.ModelAdmin):
                 'canonical_link',
             )
         }),
-        ('تاریخ', {
+        (_('تاریخ'), {
             'fields': ('created', 'updated')
         }),
     )
@@ -66,7 +68,7 @@ class FAQAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('category', 'question', 'answer', 'is_featured')
         }),
-        ('تاریخ', {
+        (_('تاریخ'), {
             'fields': ('created', 'updated')
         }),
     )

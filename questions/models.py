@@ -1,5 +1,8 @@
+# Django Module
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
+# Local Module
 from utils.models import AbstractDateTimeModel
 from seo.models import AbstractBaseSeoModel
 
@@ -7,12 +10,12 @@ class Category(AbstractBaseSeoModel, AbstractDateTimeModel):
     name = models.CharField(
         max_length= 225,
         unique= True,
-        verbose_name= 'نام دسته‌بندی'
+        verbose_name= _('نام دسته‌بندی')
     )
 
     class Meta:
-        verbose_name = "دسته‌بندی"
-        verbose_name_plural = "دسته‌بندی‌ها"
+        verbose_name = _("دسته‌بندی")
+        verbose_name_plural = _("دسته‌بندی‌ها")
         ordering = ["name"]
 
     def __str__(self):
@@ -28,23 +31,23 @@ class FAQ(AbstractDateTimeModel):
         'Category',
         on_delete= models.CASCADE,
         related_name="faqs",
-        verbose_name="دسته‌بندی موضوع"
+        verbose_name= _("دسته‌بندی موضوع")
     )
     question = models.CharField(
         max_length=255,
-        verbose_name="صورت سؤال"
+        verbose_name= _("صورت سؤال")
     )
     answer = models.TextField(
-        verbose_name="پاسخ"
+        verbose_name= _("پاسخ")
     )
     is_featured = models.BooleanField(
         default=False,
-        verbose_name="نمایش در صفحه اصلی؟"
+        verbose_name= _("نمایش در صفحه اصلی؟")
     )
 
     class Meta:
-        verbose_name = "سؤال متداول"
-        verbose_name_plural = "سؤالات متداول"
+        verbose_name = _("سؤال متداول")
+        verbose_name_plural = _("سؤالات متداول")
         ordering = ["-created"]
 
     def __str__(self):

@@ -1,5 +1,7 @@
 # Django Module
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
 
 
 # Local Module
@@ -15,11 +17,11 @@ from ckeditor.fields import RichTextField
 class Contractor(AbstractDateTimeModel):
     name = models.CharField(
         max_length= 150,
-        verbose_name= 'نام شرکت',
+        verbose_name= _('نام شرکت'),
     )
     image = models.ImageField(
         upload_to= 'contractors/%y/%m/%d/',
-        verbose_name= 'عکس برند'
+        verbose_name= _('عکس برند')
     )
     image_thumbnail = ImageSpecField(
         source='image',
@@ -30,34 +32,34 @@ class Contractor(AbstractDateTimeModel):
     alt = models.CharField(
         max_length=255,
         blank=True,
-        verbose_name='تگ آلت',
+        verbose_name= _('تگ آلت'),
     )
     successful_project = models.PositiveIntegerField(
         default= 0,
-        verbose_name= 'پروژه های موفق'
+        verbose_name= _('پروژه های موفق')
     )
     work_experience = models.PositiveIntegerField(
         default= 0,
-        help_text= 'سال',
-        verbose_name= 'سابقه کار'
+        help_text= _('سال'),
+        verbose_name= _('سابقه کار')
     )
     subtitle = models.TextField(
         blank= True,
-        verbose_name= 'توضیحات برای بنر'
+        verbose_name= _('توضیحات برای بنر')
     )
     description = RichTextField(
         blank= True,
-        verbose_name= 'درباره کمپانی'
+        verbose_name= _('درباره کمپانی')
     )
     is_featured = models.BooleanField(
         default=False,
-        verbose_name="نمایش در صفحه اصلی؟"
+        verbose_name= _("نمایش در صفحه اصلی؟")
     )
 
 
     class Meta:
-        verbose_name = 'سازنده'
-        verbose_name_plural = 'سازنده ها'
+        verbose_name = _('سازنده')
+        verbose_name_plural = _('سازنده ها')
 
 
     def __str__(self):
@@ -78,12 +80,12 @@ class Gallery(AbstractDateTimeModel):
         Contractor,
         related_name='galleries',
         on_delete=models.CASCADE,
-        verbose_name= '' ,
+        verbose_name= _('سازنده') ,
     )
     image = models.ImageField(
         max_length=255,
         upload_to='projects/gallery/%Y/%m/%d/',
-        verbose_name= 'تصویر',
+        verbose_name= _('تصویر'),
     )
     image_thumbnail = ImageSpecField(
         source='image',
@@ -95,19 +97,19 @@ class Gallery(AbstractDateTimeModel):
         max_length=255,
         blank=True,
         null= True,
-        verbose_name= 'تگ آلت',
+        verbose_name= _('تگ آلت'),
     )
     title = models.CharField(
         max_length= 255,
         null= True,
         blank= True,
-        verbose_name= 'موضوع',
+        verbose_name= _('موضوع'),
     )
     subtitle = models.CharField(
         max_length= 255,
         blank= True,
         null= True,
-        verbose_name= 'توضیحات کوتاه',
+        verbose_name= _('توضیحات کوتاه'),
     )
 
 
@@ -121,8 +123,8 @@ class Gallery(AbstractDateTimeModel):
         return None
 
     class Meta:
-        verbose_name = 'گالری'
-        verbose_name_plural = 'گالری ها'
+        verbose_name = _('گالری')
+        verbose_name_plural = _('گالری ها')
 
     def __str__(self):
         return self.contractor.name
@@ -134,32 +136,32 @@ class Gallery(AbstractDateTimeModel):
 class RegistrationContractor(AbstractDateTimeModel):
     full_name = models.CharField(
         max_length= 150,
-        verbose_name='نام شرکت',
+        verbose_name= _('نام شرکت'),
         null= True,
         blank= True,
     )
     email = models.EmailField(
-        verbose_name='ایمیل',
+        verbose_name= _('ایمیل'),
         null=True,
         blank=True,
     )
     phone = models.CharField(
         max_length=11,
-        verbose_name='شماره تماس',
+        verbose_name= _('شماره تماس'),
         blank=True,
         null=True,
     )
     contractor_type  = models.TextField(
-        verbose_name='نوع سازنده',
+        verbose_name= _('نوع سازنده'),
     )
     is_checked = models.BooleanField(
         default=False,
-        verbose_name='بررسی شده؟',
+        verbose_name= _('بررسی شده؟'),
     )
 
     class Meta:
-        verbose_name = 'درخواست'
-        verbose_name_plural = "درخواست ها"
+        verbose_name = _('درخواست')
+        verbose_name_plural = _("درخواست ها")
         ordering = ('-created',)
 
     def __str__(self):

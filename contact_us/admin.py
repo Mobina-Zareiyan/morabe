@@ -1,10 +1,12 @@
+# Djdngo Module
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
+# Local Module
 from utils.admin import DateTimeAdminMixin
 from .models import ContactUsMessages
 
 
-# Register your models here.
 
 @admin.register(ContactUsMessages)
 class ContactUsMessagesAdmin(admin.ModelAdmin):
@@ -19,10 +21,10 @@ class ContactUsMessagesAdmin(admin.ModelAdmin):
     readonly_fields = (*DateTimeAdminMixin.readonly_fields,)
     actions = ('change_checked_to_true', 'change_checked_to_false',)
 #   این چجوری کار میکنه؟؟؟
-    @admin.action(description='تغییر به بررسی شده')
+    @admin.action(description=_('تغییر به بررسی شده'))
     def change_checked_to_true(modeladmin, request, queryset):
         queryset.update(is_checked=True)
 
-    @admin.action(description='تغییر به بررسی نشده')
+    @admin.action(description=_('تغییر به بررسی نشده'))
     def change_checked_to_false(modeladmin, request, queryset):
         queryset.update(is_checked=False)

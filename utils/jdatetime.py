@@ -1,6 +1,8 @@
 # Third Party Packages
 from jdatetime import datetime as jalali_datetime
 from datetime import datetime
+from django.utils.translation import gettext_lazy as _
+
 
 
 def convert_to_jalali(instance):
@@ -22,8 +24,8 @@ def pretty_jalali_datetime_format(instance):
     """فرمت تاریخ جلالی به‌صورت زیبا (مثلاً ۲۳ مهر ۱۴۰۳)"""
     _instance = convert_to_jalali(instance)
     months = (
-        'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
-        'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+        _('فروردین'), _('اردیبهشت'), _('خرداد'), _('تیر'), _('مرداد'), _('شهریور'),
+        _('مهر'), _('آبان'), _('آذر'), _('دی'), _('بهمن'), _('اسفند')
     )
     return _instance.strftime('%d {} %Y'.format(months[int(_instance.strftime('%m')) - 1]))
 
@@ -36,26 +38,26 @@ def humanize_datetime(instance):
     if isinstance(instance, datetime):
         difference = datetime.now() - instance.replace(tzinfo=None)
     else:
-        raise ValueError('ورودی باید از نوع datetime باشد.')
+        raise ValueError(_('ورودی باید از نوع datetime باشد.'))
 
     days_past = difference.days
     seconds_past = difference.seconds
 
     if days_past == 0:
         if seconds_past < 10:
-            return 'چند لحظه قبل'
+            return _('چند لحظه قبل')
         if seconds_past < 60:
             return f'{int(seconds_past)} ثانیه قبل'
         if seconds_past < 120:
-            return 'یک دقیقه قبل'
+            return _('یک دقیقه قبل')
         if seconds_past < 3600:
             return f'{int(seconds_past / 60)} دقیقه قبل'
         if seconds_past < 7200:
-            return 'یک ساعت قبل'
+            return _('یک ساعت قبل')
         if seconds_past < 86400:
             return f'{int(seconds_past / 3600)} ساعت قبل'
     if days_past == 1:
-        return 'دیروز'
+        return _('دیروز')
     if days_past < 7:
         return f'{int(days_past)} روز قبل'
     if days_past < 31:

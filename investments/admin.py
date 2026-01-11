@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Investment, InvestmentSale
 from utils.admin import DateTimeAdminMixin
+from django.utils.translation import gettext_lazy as _
+
 
 
 
@@ -51,13 +53,13 @@ class InvestmentAdmin(admin.ModelAdmin):
     )
 
     fieldsets = (
-        ("اطلاعات کاربر", {
+        (_("اطلاعات کاربر"), {
             "fields": ("user",)
         }),
-        ("اطلاعات پروژه", {
+        (_("اطلاعات پروژه"), {
             "fields": ("project", "area")
         }),
-        ("جزئیات مالی", {
+        (_("جزئیات مالی"), {
             "fields": (
                 "price_per_meter",
                 "base_amount",
@@ -66,10 +68,10 @@ class InvestmentAdmin(admin.ModelAdmin):
                 "total_payment",
             )
         }),
-        ("وضعیت", {
+        (_("وضعیت"), {
             "fields": ("status",)
         }),
-        ("زمان‌ها", {
+        (_("زمان‌ها"), {
             "fields": ("created", "updated")
         }),
         *DateTimeAdminMixin.fieldsets,
@@ -78,12 +80,12 @@ class InvestmentAdmin(admin.ModelAdmin):
     def user_fullname(self, obj):
         return obj.user.fullname if obj.user else "-"
 
-    user_fullname.short_description = "نام کاربر"
+    user_fullname.short_description = _("نام کاربر")
 
     def user_mobile(self, obj):
         return obj.user.mobile_number if obj.user else "-"
 
-    user_mobile.short_description = "شماره موبایل"
+    user_mobile.short_description = _("شماره موبایل")
 
     def has_add_permission(self, request):
         return False
@@ -148,19 +150,19 @@ class InvestmentSaleAdmin(admin.ModelAdmin):
     )
 
     fieldsets = (
-        ("اطلاعات فروش", {
+        (_("اطلاعات فروش"), {
             "fields": ("investment", "seller", "buyer")
         }),
-        ("جزئیات متراژ", {
+        (_("جزئیات متراژ"), {
             "fields": ("selling_area", "sold_area", "price_per_meter")
         }),
-        ("جزئیات مالی", {
+        (_("جزئیات مالی"), {
             "fields": ("base_amount", "fee_amount", "tax_amount", "total_payment")
         }),
-        ("وضعیت", {
+        (_("وضعیت"), {
             "fields": ("status",)
         }),
-        ("زمان‌ها", {
+        (_("زمان‌ها"), {
             "fields": ("created", "updated")
         }),
         *DateTimeAdminMixin.fieldsets,
@@ -169,17 +171,17 @@ class InvestmentSaleAdmin(admin.ModelAdmin):
     # نمایش اطلاعات سرمایه‌گذاری مرتبط
     def investment_info(self, obj):
         return f"{obj.investment} | پروژه: {obj.investment.project.title}"
-    investment_info.short_description = "سرمایه‌گذاری"
+    investment_info.short_description = _("سرمایه‌گذاری")
 
     # نمایش نام فروشنده
     def seller_fullname(self, obj):
         return obj.seller.fullname if obj.seller else "-"
-    seller_fullname.short_description = "فروشنده"
+    seller_fullname.short_description = _("فروشنده")
 
     # نمایش نام خریدار
     def buyer_fullname(self, obj):
         return obj.buyer.fullname if obj.buyer else "-"
-    buyer_fullname.short_description = "خریدار"
+    buyer_fullname.short_description = _("خریدار")
 
     def has_add_permission(self, request):
         # جلوگیری از ایجاد دستی

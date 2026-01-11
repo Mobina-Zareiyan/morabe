@@ -3,6 +3,8 @@ from django.db import transaction
 from django.utils import timezone
 from django.db.models import Sum
 from rest_framework.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
 
 # Third Party Module
 from datetime import timedelta
@@ -20,7 +22,7 @@ from account.models import User
 def get_investment_expire_datetime():
     setting = SiteGlobalSetting.objects.first()
     if not setting:
-        raise ValidationError("تنظیمات سایت یافت نشد")
+        raise ValidationError(_("تنظیمات سایت یافت نشد"))
 
     minutes = setting.investment_pending_expire_minutes
     return timezone.now() + timedelta(minutes=minutes)
@@ -35,20 +37,20 @@ def pay_investment(investment):
     wallet = Wallet.objects.select_for_update().get(user=investment.user)
 
     if investment.status != "pending":
-        raise ValidationError("این سفارش قبلاً تعیین وضعیت شده است")
+        raise ValidationError(_("این سفارش قبلاً تعیین وضعیت شده است"))
 
     if wallet.balance < investment.total_payment:
-        raise ValidationError("موجودی کیف پول کافی نیست")
+        raise ValidationError(_("موجودی کیف پول کافی نیست"))
 
     if investment.expires_at and investment.expires_at < timezone.now():
         investment.status = "canceled"
         investment.save(update_fields=["status"])
-        raise ValidationError("مهلت پرداخت این سفارش به پایان رسیده است")
+        raise ValidationError(_("مهلت پرداخت این سفارش به پایان رسیده است"))
 
     if investment.area > project.remaining_area:
         investment.status = "canceled"
         investment.save(update_fields=["status"])
-        raise ValidationError("ظرفیت متراژی پروژه تکمیل شده است")
+        raise ValidationError(_("ظرفیت متراژی پروژه تکمیل شده است"))
 
     wallet.balance -= investment.total_payment
     wallet.save()
@@ -82,7 +84,7 @@ def get_project_remaining_area_for_quote(project):
 def calculate_investment_amounts(*, project, area):
     setting = SiteGlobalSetting.objects.first()
     if not setting:
-        raise ValidationError("تنظیمات سایت یافت نشد")
+        raise ValidationError(_("تنظیمات سایت یافت نشد"))
 
     price_per_meter = project.price_per_meter
 
@@ -106,11 +108,11 @@ def calculate_investment_amounts(*, project, area):
     if area > quote_remaining_area:
         if real_remaining_area <= 0:
             raise ValidationError({
-                "detail": "ظرفیت پروژه تکمیل شده است"
+                "detail": _("ظرفیت پروژه تکمیل شده است")
             })
         else:
             raise ValidationError({
-                "detail": "ظرفیت پروژه به‌صورت موقت رزرو شده است. لطفاً دقایقی بعد دوباره تلاش کنید.",
+                "detail": _("ظرفیت پروژه به‌صورت موقت رزرو شده است. لطفاً دقایقی بعد دوباره تلاش کنید."),
                 "remaining_area": quote_remaining_area,
                 "entered_area": area,
                 "max_allowed_area": quote_remaining_area
@@ -130,7 +132,7 @@ def calculate_investment_amounts(*, project, area):
 def calculate_investment_by_amount(*, investment, base_amount):
     setting = SiteGlobalSetting.objects.first()
     if not setting:
-        raise ValidationError("تنظیمات سایت یافت نشد")
+        raise ValidationError(_("تنظیمات سایت یافت نشد"))
 
     base_amount = Decimal(base_amount)
     price_per_meter = Decimal(investment.price_per_meter)
@@ -140,13 +142,13 @@ def calculate_investment_by_amount(*, investment, base_amount):
     )
 
     if area <= 0:
-        raise ValidationError("مبلغ وارد شده معتبر نیست")
+        raise ValidationError(_("مبلغ وارد شده معتبر نیست"))
 
     sellable_area = investment.remaining_area
 
     if area > sellable_area:
         raise ValidationError({
-            "detail": "مبلغ وارد شده بیشتر از دارایی فروشنده است",
+            "detail": _("مبلغ وارد شده بیشتر از دارایی فروشنده است"),
             "sellable_area": sellable_area,
             "entered_area": area,
         })
@@ -177,10 +179,10 @@ def create_investment_sale(*, seller, investment, amounts):
     investment = Investment.objects.select_for_update().get(pk=investment.pk)
 
     if investment.status != "paid":
-        raise ValidationError("سرمایه‌گذاری قابل فروش نیست")
+        raise ValidationError(_("سرمایه‌گذاری قابل فروش نیست"))
 
     if amounts["area"] > investment.remaining_area:
-        raise ValidationError("دارایی قابل فروش کافی نیست")
+        raise ValidationError(_("دارایی قابل فروش کافی نیست"))
 
     investment.locked_area += amounts["area"]
     investment.save(update_fields=["locked_area"])
@@ -211,16 +213,16 @@ def pay_investment_sale(sale: InvestmentSale, buyer: User, purchase_area: Decima
 
     # 2. اعتبارسنجی
     if sale.status != "selling":
-        raise ValidationError("این آگهی فعال نیست")
+        raise ValidationError(_("این آگهی فعال نیست"))
 
     if purchase_area <= 0:
-        raise ValidationError("متراژ نامعتبر است")
+        raise ValidationError(_("متراژ نامعتبر است"))
 
     if purchase_area > sale.remaining_area:
-        raise ValidationError("متراژ درخواستی بیشتر از مقدار قابل فروش است")
+        raise ValidationError(_("متراژ درخواستی بیشتر از مقدار قابل فروش است"))
 
     if purchase_area > investment.remaining_area:
-        raise ValidationError("دارایی فروشنده کافی نیست")
+        raise ValidationError(_("دارایی فروشنده کافی نیست"))
 
 
     # 3. محاسبات مالی
@@ -239,7 +241,7 @@ def pay_investment_sale(sale: InvestmentSale, buyer: User, purchase_area: Decima
     total_payment = base_amount + fee_amount + tax_amount
 
     if buyer_wallet.balance < total_payment:
-        raise ValidationError("موجودی کیف پول خریدار کافی نیست")
+        raise ValidationError(_("موجودی کیف پول خریدار کافی نیست"))
 
     # 4. انتقال پول
     buyer_wallet.balance -= total_payment
@@ -300,12 +302,12 @@ def cancel_investment_sale(sale: InvestmentSale):
 
     # 2. بررسی وضعیت sale
     if sale.status != "selling":
-        raise ValidationError("فروش فقط در وضعیت در انتظار فروش قابل لغو است")
+        raise ValidationError(_("فروش فقط در وضعیت در انتظار فروش قابل لغو است"))
 
     # 3. بازگرداندن locked_area به investment
     investment.locked_area -= sale.selling_area
     if investment.locked_area < 0:
-        raise ValidationError("خطا در محاسبه متراژ قفل شده")
+        raise ValidationError(_("خطا در محاسبه متراژ قفل شده"))
     investment.save(update_fields=["locked_area"])
 
     # 4. وضعیت sale را لغو می‌کنیم

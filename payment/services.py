@@ -1,7 +1,8 @@
 from django.db import transaction as db_transaction
-from .models import Transaction, WithdrawRequest, CreditCard, Wallet
 from django.db import transaction
+from django.utils.translation import gettext_lazy as _
 
+from .models import Transaction, WithdrawRequest, CreditCard, Wallet
 
 
 @db_transaction.atomic
@@ -55,7 +56,7 @@ def create_withdraw_request(user, bank_card_id, amount):
     bank_card = CreditCard.objects.get(id=bank_card_id, user=user)
 
     if amount > wallet.available_balance:
-        raise ValueError("موجودی کافی نیست")
+        raise ValueError(_("موجودی کافی نیست"))
 
     with transaction.atomic():
         # بلوکه کردن موجودی
@@ -78,7 +79,7 @@ def approve_withdraw_request(withdraw_request):
 
     with transaction.atomic():
         if withdraw_request.status != WithdrawRequest.PENDING:
-            raise ValueError("این درخواست قابل تایید نیست.")
+            raise ValueError(_("این درخواست قابل تایید نیست."))
 
         # کم کردن موجودی واقعی و بلوکه
         wallet.balance -= withdraw_request.amount
@@ -95,7 +96,7 @@ def reject_withdraw_request(withdraw_request):
 
     with transaction.atomic():
         if withdraw_request.status != WithdrawRequest.PENDING:
-            raise ValueError("این درخواست قابل رد کردن نیست.")
+            raise ValueError(_("این درخواست قابل رد کردن نیست."))
 
         # آزاد کردن مبلغ بلوکه شده
         wallet.blocked_balance -= withdraw_request.amount

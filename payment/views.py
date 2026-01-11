@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.db import transaction
 from django.db import transaction as db_transaction
+from django.utils.translation import gettext_lazy as _
+
 
 # Local Module
 from .serializers import (WithdrawRequestSerializer, DepositSerializer,
@@ -44,7 +46,7 @@ class WithdrawRequestCreateAPIView(APIView):
 
         return Response(
             {
-                "message": "درخواست برداشت با موفقیت ثبت شد",
+                "message": _("درخواست برداشت با موفقیت ثبت شد"),
                 "withdraw_request_id": withdraw_request.id,
                 "available_balance": request.user.wallet.available_balance
             },
@@ -107,7 +109,7 @@ class WalletDepositRequestAPIView(APIView):
         # بررسی مبلغ
         if amount <= 0:
             return Response(
-                {"error": "مبلغ باید بزرگتر از صفر باشد."},
+                {"error": _("مبلغ باید بزرگتر از صفر باشد.")},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -135,7 +137,7 @@ class WalletDepositRequestAPIView(APIView):
             result = response.json()
         except Exception as e:
             return Response(
-                {"error": "خطا در اتصال به درگاه پرداخت", "details": str(e)},
+                {"error": _("خطا در اتصال به درگاه پرداخت"), "details": str(e)},
                 status=status.HTTP_502_BAD_GATEWAY
             )
 
@@ -158,7 +160,7 @@ class WalletDepositRequestAPIView(APIView):
             return Response({"payment_url": payment_url}, status=status.HTTP_200_OK)
 
         return Response(
-            {"error": "خطا در ایجاد تراکنش", "details": data.get("message")},
+            {"error": _("خطا در ایجاد تراکنش"), "details": data.get("message")},
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -181,7 +183,7 @@ class WalletDepositVerifyAPIView(APIView):
 
         if not authority or status_param != "OK":
             return Response(
-                {"error": "پرداخت توسط کاربر لغو شد."},
+                {"error": _("پرداخت توسط کاربر لغو شد.")},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -192,7 +194,7 @@ class WalletDepositVerifyAPIView(APIView):
             )
         except Transaction.DoesNotExist:
             return Response(
-                {"error": "تراکنش معتبر نیست یا قبلاً تایید شده است."},
+                {"error": _("تراکنش معتبر نیست یا قبلاً تایید شده است.")},
                 status=status.HTTP_404_NOT_FOUND
             )
 
@@ -207,7 +209,7 @@ class WalletDepositVerifyAPIView(APIView):
             result = response.json()
         except Exception as e:
             return Response(
-                {"error": "خطا در ارتباط با زرین‌پال", "details": str(e)},
+                {"error": _("خطا در ارتباط با زرین‌پال"), "details": str(e)},
                 status=status.HTTP_502_BAD_GATEWAY
             )
 
@@ -224,7 +226,7 @@ class WalletDepositVerifyAPIView(APIView):
                 wallet.save()
 
             return Response({
-                "message": "پرداخت با موفقیت انجام شد.",
+                "message": _("پرداخت با موفقیت انجام شد."),
                 "reference_id": transaction_record.reference_id,
                 "new_balance": wallet.balance
             }, status=status.HTTP_200_OK)
@@ -234,7 +236,7 @@ class WalletDepositVerifyAPIView(APIView):
         transaction_record.save()
 
         return Response(
-            {"error": "پرداخت ناموفق بود.", "details": data.get("message")},
+            {"error": _("پرداخت ناموفق بود."), "details": data.get("message")},
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -274,7 +276,7 @@ class CreditCardCreateAPIView(APIView):
             card_number=serializer.validated_data["card_number"]
         ).exists():
             return Response(
-                {"error": "این کارت قبلاً ثبت شده است."},
+                {"error": _("این کارت قبلاً ثبت شده است.")},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -282,7 +284,7 @@ class CreditCardCreateAPIView(APIView):
 
         return Response(
             {
-                "message": "کارت بانکی با موفقیت ثبت شد.",
+                "message": _("کارت بانکی با موفقیت ثبت شد."),
                 "card": CreditCardSerializer(credit_card).data
             },
             status=status.HTTP_201_CREATED
@@ -325,7 +327,7 @@ class CreditCardDeleteAPIView(APIView):
             card = CreditCard.objects.get(pk=pk, user=request.user, is_active=True)
         except CreditCard.DoesNotExist:
             return Response(
-                {"error": "کارت پیدا نشد یا قبلاً حذف شده است."},
+                {"error": _("کارت پیدا نشد یا قبلاً حذف شده است.")},
                 status=status.HTTP_404_NOT_FOUND
             )
 
@@ -333,7 +335,7 @@ class CreditCardDeleteAPIView(APIView):
         card.save()
 
         return Response(
-            {"message": "کارت با موفقیت حذف شد."},
+            {"message": _("کارت با موفقیت حذف شد.")},
             status=status.HTTP_200_OK
         )
 
@@ -356,7 +358,7 @@ class WalletDetailAPIView(APIView):
             wallet = request.user.wallet
         except Wallet.DoesNotExist:
             return Response(
-                {"error": "کیف پول یافت نشد."},
+                {"error": _("کیف پول یافت نشد.")},
                 status=404
             )
 

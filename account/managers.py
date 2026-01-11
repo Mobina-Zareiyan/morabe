@@ -3,18 +3,17 @@ import random
 from django.contrib.auth.models import BaseUserManager
 
 
-# -----------------------------
-#   تابع تولید کد معرف یکتا
-# -----------------------------
-def generate_referral_code(length=8):
-    # اینجا import رو انجام میدم که نیوفته تو حلقه
-    from .models import User
-    chars = string.ascii_uppercase + string.digits
-    while True:
-        code = ''.join(random.choices(chars, k=length))
-        if not User.objects.filter(referral_code=code).exists():
-            return code
-
+# # -----------------------------
+# #   تابع تولید کد معرف یکتا
+# # -----------------------------
+# def generate_referral_code(length=8):
+#     from .models import User
+#     chars = string.ascii_uppercase + string.digits
+#     while True:
+#         code = ''.join(random.choices(chars, k=length))
+#         if not User.objects.filter(referral_code=code).exists():
+#             return code
+#
 
 # -----------------------------
 #         UserManager
