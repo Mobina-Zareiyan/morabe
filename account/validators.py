@@ -52,6 +52,19 @@ def validate_mobile_number_alg(value):
     return value
 
 
+def validate_mobile_number_exist(value):
+    """
+    بررسی عضویت کاربر با این شماره موبایل
+    """
+
+    if User.objects.filter(mobile=value).exists():
+        raise value
+
+    return ValidationError("این شماره موبایل قبلاً ثبت نشده است.")
+
+
+
+
 def validate_national_code_unique(value):
     validate_national_code(value)  # چک الگوریتم
     if User.objects.filter(national_code=value).exists():

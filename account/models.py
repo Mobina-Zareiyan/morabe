@@ -6,8 +6,11 @@ from django.urls import reverse
 # Local apps
 from utils.models import AbstractDateTimeModel, AbstractUUIDModel
 from .managers import UserManager
+from utils.services import send_normal_sms
+
 # Python Standard Library
 import uuid as _uuid
+import random
 
 
 
@@ -108,4 +111,26 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
     def is_admin(self):
         return self.is_superuser and self.is_staff
 
+
+
+class OtpCode(AbstractDateTimeModel):
+    phone_number = models.CharField(max_length= 11)
+    code = models.PositiveSmallIntegerField()
+    is_active = models.BooleanField(default= True)
+
+    @classmethod
+    def send_otp(cls, phone):
+        random_code = random.randint(100000, 999999)
+        cls.objects.filter(phone_number=phone, is_active=True).update(is_active=False
+                                                                      )
+        send_normal_sms(phone, random_code)
+        cls.objects.create(phone_number=phone, code=random_code)
+
+    class Meta:
+        ordering = ('-created',)
+        verbose_name = "کد یکبار مصرف"
+        verbose_name_plural = "کدهای یکبار مصرف"
+
+    def __str__(self):
+        return f'{self.phone_number} - {self.code} - {self.created}'
 

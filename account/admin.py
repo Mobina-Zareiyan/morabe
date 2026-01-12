@@ -1,17 +1,11 @@
 from django.contrib.auth.admin import Group
 from django.contrib import admin
-from django.db import models
-from django.forms import Textarea
-from .models import User
-from seo.admin import AbstractBaseSeoModel, MetadataModel
+
+from .models import User, OtpCode
 
 
 
 admin.site.unregister(Group)
-
-# -----------------------------
-# Inline برای Metadata
-# -----------------------------
 
 
 # -----------------------------
@@ -72,3 +66,8 @@ class UserAdmin(admin.ModelAdmin):
 
     # اضافه کردن Inlineها
     inlines = ( ReferralInline, )
+
+
+@admin.register(OtpCode)
+class OtpCodeAdmin(admin.ModelAdmin):
+    list_display = ('phone_number', 'code', 'created')

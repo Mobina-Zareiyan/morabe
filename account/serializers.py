@@ -2,7 +2,7 @@ from rest_framework import serializers
 from account.models import User
 from django.contrib.auth.password_validation import validate_password
 from .validators import (validate_mobile_number, validate_national_code, validate_national_code_unique,
-                         validate_referral_code, validate_mobile_number_alg)
+                         validate_referral_code, validate_mobile_number_alg, validate_mobile_number_exist)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -37,8 +37,16 @@ class PasswordResetCheckSerializer(serializers.Serializer):
     mobile_number = serializers.CharField(max_length= 11, validators=[validate_mobile_number_alg])
 
 
+class PasswordResetCheckMobileSerializer(serializers.Serializer):
+    mobile_number = serializers.CharField(max_length=11, validators=[validate_mobile_number_exist])
+
+class VerifyCodeSerializer(serializers.Serializer):
+    code = serializers.IntegerField()
+
+class VerifyNationalCodeSerializer(serializers.Serializer):
+    national_code = serializers.CharField(validators= [validate_national_code])
+
 class PasswordResetSerializer(serializers.Serializer):
-    mobile_number = serializers.CharField(max_length= 11, validators=[validate_mobile_number_alg])
     new_password = serializers.CharField(write_only=True, validators=[validate_password])
     new_password1 = serializers.CharField(write_only=True, validators=[validate_password])
 
@@ -66,3 +74,14 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         ]
         read_only_fields = ["mobile_number", ]
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    pre_password = serializers.CharField(write_only= True)
+    new_password = serializers.CharField(write_only=True, validators=[validate_password])
+    new_password1 = serializers.CharField(write_only=True, validators=[validate_password])
+
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['new_password1']:
+            raise serializers.ValidationError("رمزهای عبور مطابقت ندارند.")
+        return attrs

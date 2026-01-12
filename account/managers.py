@@ -1,19 +1,19 @@
 import string
 import random
+from django.utils.crypto import get_random_string
 from django.contrib.auth.models import BaseUserManager
 
 
-# # -----------------------------
-# #   تابع تولید کد معرف یکتا
-# # -----------------------------
-# def generate_referral_code(length=8):
-#     from .models import User
-#     chars = string.ascii_uppercase + string.digits
-#     while True:
-#         code = ''.join(random.choices(chars, k=length))
-#         if not User.objects.filter(referral_code=code).exists():
-#             return code
-#
+# -----------------------------
+#   تابع تولید کد معرف یکتا
+# -----------------------------
+def generate_referral_code(length=8):
+    chars = string.ascii_uppercase + string.digits
+    while True:
+        code = get_random_string(length= length, allowed_chars= chars)
+        if not "User".objects.filter(referral_code=code).exists():
+            return code
+
 
 # -----------------------------
 #         UserManager
