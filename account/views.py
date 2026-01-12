@@ -2,16 +2,12 @@
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from django.contrib.auth import authenticate
-from django.utils.crypto import get_random_string
-from django.core.cache import cache
 
 # Local Module
 from account.models import User, OtpCode
-from utils.services import send_normal_sms
 from account.serializers import (RegisterSerializer, LoginSerializer, PasswordResetCheckSerializer,
                                  PasswordResetSerializer, ProfileSerializer, PasswordResetCheckMobileSerializer,
                                  VerifyCodeSerializer, VerifyNationalCodeSerializer, ChangePasswordSerializer)

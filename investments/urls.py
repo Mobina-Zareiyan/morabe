@@ -26,6 +26,7 @@ urlpatterns = [
     # investment sale cancel
     path("investments/sale/<int:pk>/cancel/", views.InvestmentSaleCancelAPIView.as_view(), name= "investment-sale-cancel"),
 
-    #
+    # investment sale list
+    path('investment/sale/list/', views.InvestmentSaleListAPIview.as_view(), name= 'investment-sale-list'),
 
 ]
