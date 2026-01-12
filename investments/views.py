@@ -14,7 +14,8 @@ from decimal import Decimal
 # Local Module
 from .models import Investment, InvestmentSale
 from .serializers import (InvestmentQuoteSerializer, InvestmentCreateSerializer,
-                          InvestmentSaleQuoteSerializer, InvestmentSaleCreateSerializer)
+                          InvestmentSaleQuoteSerializer, InvestmentSaleCreateSerializer,
+                          InvestmentDetailSerializer, InvestmentSaleDetailSerializer)
 
 from .services import pay_investment, pay_investment_sale, cancel_investment_sale
 
@@ -59,7 +60,13 @@ class InvestmentPayAPIView(APIView):
             "detail": _("پرداخت با موفقیت انجام شد")
         })
 
+# این درسته؟؟؟
+class InvestmentDetailAPIVew(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def get(self):
+        serializer = InvestmentDetailSerializer(many= True)
+        return Response(serializer.data)
 
 
 class InvestmentSaleQuoteAPIView(APIView):
@@ -120,6 +127,11 @@ class InvestmentSaleCancelAPIView(APIView):
         )
 
 
+#   این درسته؟؟؟
+class InvestmentSaleDetailAPIview(generics.ListAPIView):
+
+    queryset = InvestmentSale.objects.all()
+    serializer_class = InvestmentSaleDetailSerializer
 
 
 

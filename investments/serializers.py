@@ -149,6 +149,26 @@ class InvestmentSaleCreateSerializer(serializers.ModelSerializer):
         )
 
 
+class InvestmentSaleDetailSerializer(serializers.ModelSerializer):
+    project_title = serializers.CharField(source="investment.project.title", read_only=True)
+
+    class Meta:
+        model = InvestmentSale
+        fields = (
+            "id",
+            "project_title",
+            "selling_area",
+            "price_per_meter",
+            "base_amount",
+            "fee_amount",
+            "tax_amount",
+            "total_payment",
+            "status",
+            "created",
+            "sold_area",
+        )
+
+
 
 
 

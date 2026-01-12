@@ -4,6 +4,7 @@ from . import views
 app_name = 'investments'
 
 urlpatterns = [
+
     # گرفتن quote برای یک پروژه
     path("investments/quote/", views.InvestmentQuoteAPIView.as_view(), name="investment-quote"),
 
@@ -24,5 +25,7 @@ urlpatterns = [
 
     # investment sale cancel
     path("investments/sale/<int:pk>/cancel/", views.InvestmentSaleCancelAPIView.as_view(), name= "investment-sale-cancel"),
+
+    #
 
 ]
