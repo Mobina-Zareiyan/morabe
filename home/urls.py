@@ -13,5 +13,6 @@ urlpatterns = [
     # path("questions/", views.FAQViewSet.as_view(), name= "h-questions"),
     path("contractor/", views.ContractorListAPIView.as_view(), name= "h-Contractor"),
     path("project/", views.ProjectListAPIView.as_view(), name= "h-project"),
+    path('investment/sale/',views.InvestmentSaleListAPIview.as_view(), name= "h-investment"),
     path('', include(router.urls)),
 ]

@@ -151,21 +151,21 @@ class InvestmentSaleCreateSerializer(serializers.ModelSerializer):
 
 class InvestmentSaleDetailSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source="investment.project.title", read_only=True)
+    remaining_area = serializers.DecimalField(max_digits= 14, decimal_places= 6, source= "investment.remaining_area", read_only= True)
+    all_payment = serializers.DecimalField(max_digits= 14, decimal_places= 6, source= "investment.all_payment", read_only= True)
+
 
     class Meta:
         model = InvestmentSale
         fields = (
             "id",
             "project_title",
-            "selling_area",
+            "remaining_area",
             "price_per_meter",
-            "base_amount",
-            "fee_amount",
-            "tax_amount",
-            "total_payment",
+            "all_payment",
             "status",
             "created",
-            "sold_area",
+            "is_featured",
         )
 
 

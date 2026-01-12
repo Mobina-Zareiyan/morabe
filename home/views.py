@@ -14,7 +14,8 @@ from contractor.models import Contractor
 from contractor.serializers import ContractorListSerializer
 from project.models import Project
 from project.serializers import ProjectListSerializer
-
+from investments.models import InvestmentSale
+from investments.serializers import InvestmentSaleDetailSerializer
 
 
 
@@ -77,6 +78,13 @@ class ProjectListAPIView(generics.ListAPIView):
 
     serializer_class = ProjectListSerializer
 
+
+
+
+class InvestmentSaleListAPIview(generics.ListAPIView):
+
+    queryset = InvestmentSale.objects.all()
+    serializer_class = InvestmentSaleDetailSerializer
 
 
 

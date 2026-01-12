@@ -174,6 +174,10 @@ class InvestmentSale(AbstractDateTimeModel):
         blank=True,
         verbose_name= _('زمان انقضای پرداخت'),
     )
+    is_featured = models.BooleanField(
+        default= False,
+        verbose_name= _("نمایش در صفحه اصلی")
+    )
 
 
     def clean(self):
@@ -186,6 +190,11 @@ class InvestmentSale(AbstractDateTimeModel):
     @property
     def remaining_area(self):
         return self.selling_area - self.sold_area
+
+
+    @property
+    def all_payment(self):
+        return self.selling_area * self.price_per_meter
 
 
     class Meta:

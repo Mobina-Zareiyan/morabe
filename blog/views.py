@@ -13,7 +13,7 @@ class BlogDetailAPIView(generics.RetrieveAPIView):
         'comments'
     )
     serializer_class = BlogDetailSerializer
-    lookup_field = 'slug'
+    lookup_field = 'id'
 
 
 class BlogCommentCreateAPIView(generics.CreateAPIView):
