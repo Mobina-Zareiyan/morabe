@@ -128,7 +128,7 @@ class InvestmentSaleCancelAPIView(APIView):
 
 
 #   این درسته؟؟؟
-class InvestmentSaleDetailAPIview(generics.ListAPIView):
+class InvestmentSaleListAPIview(generics.ListAPIView):
 
     queryset = InvestmentSale.objects.all()
     serializer_class = InvestmentSaleDetailSerializer
