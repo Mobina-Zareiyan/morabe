@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
-from .models import CreditCard, SuggestedDepositAmount, Wallet
+from .models import CreditCard, SuggestedDepositAmount, Wallet, Transaction, WithdrawRequest
 
 
 class WithdrawRequestSerializer(serializers.Serializer):
@@ -75,9 +75,22 @@ class WalletSerializer(serializers.ModelSerializer):
         fields = ["user_fullname", "balance", "blocked_balance", "available_balance"]
 
 
+class TransactionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Transaction
+        fields = ["amount", "transaction_type", "status", "created", ]
 
 
 
+class WithdrawApproveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WithdrawRequest
+        fields = ["wallet", "bank_card", "amount", "status"]
+
+
+
+# class WithdrawRequestPendingSerializer(serializers.Serializer):
 
 
 

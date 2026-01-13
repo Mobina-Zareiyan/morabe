@@ -2,8 +2,9 @@
 import requests
 from django.conf import settings
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import status
 from django.db import transaction
 from django.db import transaction as db_transaction
@@ -12,8 +13,9 @@ from django.utils.translation import gettext_lazy as _
 
 # Local Module
 from .serializers import (WithdrawRequestSerializer, DepositSerializer,
-                          SuggestedDepositAmountSerializer, CreditCardSerializer, WalletSerializer)
-from .services import create_withdraw_request
+                          SuggestedDepositAmountSerializer, CreditCardSerializer, WalletSerializer,
+                          TransactionSerializer)
+from .services import create_withdraw_request, reject_withdraw_request, approve_withdraw_request
 from .models import WithdrawRequest, Transaction, SuggestedDepositAmount, CreditCard, Wallet
 from morabe import settings
 
@@ -365,8 +367,69 @@ class WalletDetailAPIView(APIView):
         serializer = WalletSerializer(wallet)
         return Response(serializer.data)
 
+# این ها درستن؟؟؟
+
+# ---------------------------
+# 10. نمایش تراکنش های کیف پول به کاربر
+# ---------------------------
+class TransactionAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request
 
 
+
+
+
+# ---------------------------
+# 11. قبول درخواست برداشت
+# ---------------------------
+class WithdrawRequestApproveAPIView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+
+        withdraw_request = WithdrawRequest.objects.filter(status= "PENDING")
+        approve_withdraw_request(
+           withdraw_request= withdraw_request
+        )
+
+        return Response(
+            {
+                "message": _("واریز به حساب کاربر با موفقیت به پایان رسید."),
+                "withdraw_id": withdraw_request.id,
+                "available_balance": withdraw_request.wallet.available_balance
+            },
+            status=status.HTTP_201_CREATED
+        )
+
+
+
+
+
+# ---------------------------
+# 12. رد درخواست برداشت
+# ---------------------------
+class WithdrawRequestRejectAPIView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+
+        withdraw_request = WithdrawRequest.objects.get(status= "PENDING")
+        reject_withdraw_request(
+           withdraw_request= withdraw_request
+        )
+
+        return Response(
+            {
+                "message": _("واریز به حساب کاربر با موفقیت به پایان رسید."),
+                "withdraw_id": withdraw_request.id,
+                "available_balance": withdraw_request.wallet.available_balance
+            },
+            status=status.HTTP_201_CREATED
+        )
 
 
 

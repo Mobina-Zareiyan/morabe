@@ -21,32 +21,6 @@ def charge_wallet(wallet, amount, ref_id):
 
 
 
-@db_transaction.atomic
-def request_withdraw(wallet, bank_card, amount):
-
-    if wallet.balance < amount:
-        raise ValueError("Insufficient balance")
-
-    wallet.balance -= amount
-    wallet.save()
-
-    withdraw = WithdrawRequest.objects.create(
-        wallet=wallet,
-        bank_card=bank_card,
-        amount=amount
-    )
-
-    Transaction.objects.create(
-        wallet=wallet,
-        amount=amount,
-        transaction_type=Transaction.WITHDRAW,
-        status=Transaction.PENDING
-    )
-
-    return withdraw
-
-
-
 
 
 
@@ -59,11 +33,10 @@ def create_withdraw_request(user, bank_card_id, amount):
         raise ValueError(_("موجودی کافی نیست"))
 
     with transaction.atomic():
-        # بلوکه کردن موجودی
         wallet.blocked_balance += amount
         wallet.save()
 
-        # ایجاد درخواست برداشت
+        # ایجاد درخواست 
         withdraw_request = WithdrawRequest.objects.create(
             wallet=wallet,
             bank_card=bank_card,
@@ -81,7 +54,6 @@ def approve_withdraw_request(withdraw_request):
         if withdraw_request.status != WithdrawRequest.PENDING:
             raise ValueError(_("این درخواست قابل تایید نیست."))
 
-        # کم کردن موجودی واقعی و بلوکه
         wallet.balance -= withdraw_request.amount
         wallet.blocked_balance -= withdraw_request.amount
         wallet.save()
@@ -98,7 +70,6 @@ def reject_withdraw_request(withdraw_request):
         if withdraw_request.status != WithdrawRequest.PENDING:
             raise ValueError(_("این درخواست قابل رد کردن نیست."))
 
-        # آزاد کردن مبلغ بلوکه شده
         wallet.blocked_balance -= withdraw_request.amount
         wallet.save()
 

@@ -101,7 +101,9 @@ class Transaction(AbstractDateTimeModel):
         on_delete=models.PROTECT,
         verbose_name= _("کیف پول"),
     )
-    amount = models.BigIntegerField(verbose_name= _("مقدار"))
+    amount = models.BigIntegerField(
+        verbose_name= _("مقدار")
+    )
     transaction_type = models.CharField(
         max_length=10,
         choices=TRANSACTION_TYPE_CHOICES,
