@@ -196,6 +196,10 @@ class InvestmentSale(AbstractDateTimeModel):
     def all_payment(self):
         return self.selling_area * self.price_per_meter
 
+    @property
+    def var_price(self):
+        return self.investment.project.price_per_meter - self.price_per_meter
+
 
     class Meta:
         verbose_name = _("فروش سرمایه‌گذاری")

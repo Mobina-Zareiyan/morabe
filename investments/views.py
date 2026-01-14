@@ -127,11 +127,51 @@ class InvestmentSaleCancelAPIView(APIView):
         )
 
 
-#   این درسته؟؟؟
+
 class InvestmentSaleListAPIview(generics.ListAPIView):
 
-    queryset = InvestmentSale.objects.all()
+    queryset = InvestmentSale.objects.filter(status= "selling")
     serializer_class = InvestmentSaleDetailSerializer
+
+
+
+
+
+# #   این درسته؟؟؟ بقیه اطالاعاتش رو چجوری بهش اضافه کنم؟؟؟؟خدایا کاش من انقدر حالیم بود که باید چیکار کنم
+# class InvestmentSaleListAPIview(generics.GenericAPIView):
+#     serializer_class = InvestmentSaleDetailSerializer
+#
+#     def get(self, request):
+#
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#
+#         var_price = serializer.validated_data['var_price']
+#
+#         if var_price < 0:
+#             return Response(
+#                 {
+#                     'detail': "زیر قیمت بازار",
+#                     "var_price": -1 * var_price,
+#                  }
+#             )
+#
+#         elif var_price > 0:
+#             return Response(
+#                 {
+#                     'detail': "بالای قیمت بازار",
+#                     "var_price": var_price
+#                 }
+#             )
+#
+#         else:
+#             return Response(
+#                 {
+#                     'detail': "یکسان با قیمت بازار",
+#                     "var_price": 0
+#                 }
+#             )
+#
 
 
 
