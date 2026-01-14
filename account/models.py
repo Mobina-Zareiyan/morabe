@@ -2,15 +2,23 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+from django.utils.crypto import get_random_string
+
 
 # Local apps
 from utils.models import AbstractDateTimeModel, AbstractUUIDModel
 from .managers import UserManager
 from utils.services import send_normal_sms
 
+
 # Python Standard Library
 import uuid as _uuid
 import random
+import qrcode
+from io import BytesIO
+import base64
+import string
 
 
 
@@ -72,6 +80,8 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
     )
     referral_code = models.CharField(
         max_length=10,
+        null= True,
+        blank= True,
         unique=True,
         verbose_name='کد معرف'
     )
@@ -83,7 +93,24 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
         related_name='referrals',
         verbose_name='معرف'
     )
-    # video
+    video = models.FileField(
+        null= True,
+        blank= True,
+        upload_to= 'account/%y/%m/%d/',
+        editable= True,
+    )
+    seryal = models.CharField(
+        max_length= 10,
+        null= True,
+        blank= True,
+    )
+    qr_code_base64 = models.CharField(
+        max_length= 225,
+        null= True,
+        blank= True
+
+    )
+
 
     USERNAME_FIELD = 'mobile_number'
     REQUIRED_FIELDS = [
@@ -110,6 +137,36 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
 
     def is_admin(self):
         return self.is_superuser and self.is_staff
+
+
+    def create_qr_code(self):
+        """Generate base64 QR code linking to the scan URL"""
+        qr = qrcode.make(self.referral_code)
+        buffer = BytesIO()
+        qr.save(buffer, format='PNG')
+        qr_image = buffer.getvalue()
+        qr_base64 = base64.b64encode(qr_image).decode('utf-8')
+        print("*********************")
+        return f"data:image/png;base64,{qr_base64}"
+
+
+    def create_referral_code(self):
+        chars = string.ascii_uppercase + string.digits
+        while True:
+            code = get_random_string(length=8, allowed_chars=chars)
+            if not User.objects.filter(referral_code=code).exists():
+                return code
+
+
+
+    def save(self, *args, **kwargs):
+        if not self.qr_code_base64:
+            self.qr_code_base64 = self.create_qr_code()
+
+        if not self.referral_code:
+            self.referral_code = self.create_referral_code()
+
+        super().save(*args, **kwargs)
 
 
 

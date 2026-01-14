@@ -1,6 +1,8 @@
+# Django Module
 from django.contrib.auth.admin import Group
 from django.contrib import admin
 
+# Local Module
 from .models import User, OtpCode
 
 
@@ -48,13 +50,20 @@ class UserAdmin(admin.ModelAdmin):
     # فیلتر سمت راست
     list_filter = ('is_active', 'is_staff', 'is_superuser', 'province', 'city')
 
+    readonly_fields= ('qr_code_base64',)
+
     # بخش‌بندی فرم
     fieldsets = (
         (None, {'fields': ('first_name', 'last_name', 'mobile_number', 'password')}),
         ('اطلاعات اضافی', {'fields': ('date_birth', 'national_code', 'province', 'city', 'address')}),
-        ('معرف / کد معرف', {'fields': ('referral_code', 'referred_by')}),
+        ('معرف / کد معرف', {'fields': ('referral_code', 'referred_by', 'qr_code_base64',)}),
         ('مجوزها', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
     )
+
+    # def get_qr_code(self, obj):
+    #     print(obj.qr_code)
+    #     return obj.qr_code
+
 
     # نمایش تعداد زیرمجموعه‌ها
     def get_invited_count(self, obj):
