@@ -26,64 +26,64 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
     """
     This models inherits from django base user.
     """
-    # اگه این نباشه جنگو پیش فرض از اعداد ترتیبی استفادهه میکنه
+    # اگه این نباشه جنگو پیش فرض از اعداد ترتیبی استفاده میکنه
     uuid = models.UUIDField(unique=True, default=_uuid.uuid4, editable=False)
     first_name = models.CharField(
         max_length=200,
-        verbose_name='نام',
+        verbose_name= _('نام'),
     )
     last_name = models.CharField(
         max_length=200,
-        verbose_name='نام خانوادگی',
+        verbose_name= _('نام خانوادگی'),
     )
     date_birth = models.DateField(
-        verbose_name= 'تاریخ تولد',
+        verbose_name= _('تاریخ تولد'),
     )
     national_code = models.CharField(
         max_length=10,
-        verbose_name= 'کدملی',
+        verbose_name= _('کدملی'),
     )
     mobile_number = models.CharField(
         max_length=11,
         unique= True,
-        verbose_name='شماره موبایل',
+        verbose_name= _('شماره موبایل'),
     )
     province = models.CharField(
         max_length= 225,
         null= True,
         blank= True,
-        verbose_name= 'استان',
+        verbose_name= _('استان'),
     )
     city = models.CharField(
         max_length= 225,
         null= True,
         blank= True,
-        verbose_name= 'شهر',
+        verbose_name= _('شهر'),
     )
     address = models.CharField(
         max_length= 225,
         null= True,
         blank= True,
-        verbose_name= 'آدرس',
+        verbose_name= _('آدرس'),
     )
     is_active = models.BooleanField(
         default=False,
-        verbose_name='فعال',
+        verbose_name= _('فعال'),
     )
     is_superuser = models.BooleanField(
         default=False,
-        verbose_name='ادمین',
+        verbose_name= _('ادمین'),
     )
     is_staff = models.BooleanField(
         default=False,
-        verbose_name='کارمند',
+        verbose_name= _('کارمند'),
     )
     referral_code = models.CharField(
         max_length=10,
         null= True,
         blank= True,
         unique=True,
-        verbose_name='کد معرف'
+        verbose_name= _('کد معرف')
     )
     referred_by = models.ForeignKey(
         'self',
@@ -91,24 +91,26 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
         blank=True,
         null=True,
         related_name='referrals',
-        verbose_name='معرف'
+        verbose_name= _('معرف')
     )
     video = models.FileField(
         null= True,
         blank= True,
         upload_to= 'account/%y/%m/%d/',
         editable= True,
+        verbose_name= _("ویدئو احراز هویت")
     )
     seryal = models.CharField(
         max_length= 10,
         null= True,
         blank= True,
+        verbose_name= _("سریال کارت ملی")
     )
     qr_code_base64 = models.CharField(
         max_length= 225,
         null= True,
-        blank= True
-
+        blank= True,
+        verbose_name= _("QR کد")
     )
 
 
@@ -125,8 +127,8 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
 
     class Meta:
         ordering = ('-created',)
-        verbose_name = 'کاربر'
-        verbose_name_plural = 'کاربران'
+        verbose_name = _('کاربر')
+        verbose_name_plural = _('کاربران')
 
     def __str__(self):
         return self.mobile_number
@@ -185,8 +187,8 @@ class OtpCode(AbstractDateTimeModel):
 
     class Meta:
         ordering = ('-created',)
-        verbose_name = "کد یکبار مصرف"
-        verbose_name_plural = "کدهای یکبار مصرف"
+        verbose_name = _("کد یکبار مصرف")
+        verbose_name_plural = _("کدهای یکبار مصرف")
 
     def __str__(self):
         return f'{self.phone_number} - {self.code} - {self.created}'
