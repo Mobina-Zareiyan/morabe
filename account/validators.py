@@ -1,16 +1,15 @@
 from django.core.exceptions import ValidationError
 import re
 from .models import User
+
 def validate_national_code(value):
     """
     اعتبارسنجی کد ملی ایران بر اساس الگوریتم رقم‌کنترل
     """
 
-    # فقط اعداد و طول 10
     if not value.isdigit() or len(value) != 10:
         raise ValidationError("کد ملی باید شامل ۱۰ رقم باشد.")
 
-    # جلوگیری از کدهای جعلی تکراری مثل 1111111111
     if value in [
         "0000000000", "1111111111", "2222222222", "3333333333", "4444444444",
         "5555555555", "6666666666", "7777777777", "8888888888", "9999999999"
@@ -30,7 +29,7 @@ def validate_mobile_number(value):
     """
     اعتبارسنجی شماره موبایل ایران
     """
-    pattern = r'^09\d{9}$'  # الگوی شماره موبایل ایران
+    pattern = r'^09\d{9}$'
 
     if not re.match(pattern, value):
         raise ValidationError("شماره موبایل معتبر نیست")
@@ -44,7 +43,7 @@ def validate_mobile_number_alg(value):
     """
     اعتبارسنجی شماره موبایل ایران
     """
-    pattern = r'^09\d{9}$'  # الگوی شماره موبایل ایران
+    pattern = r'^09\d{9}$'
 
     if not re.match(pattern, value):
         raise ValidationError("شماره موبایل معتبر نیست")

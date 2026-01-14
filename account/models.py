@@ -107,7 +107,7 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
         verbose_name= _("سریال کارت ملی")
     )
     qr_code_base64 = models.CharField(
-        max_length= 225,
+        max_length= 255,
         null= True,
         blank= True,
         verbose_name= _("QR کد")

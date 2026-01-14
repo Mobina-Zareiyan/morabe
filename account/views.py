@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 # Local Module
 from account.models import User, OtpCode
 from account.serializers import (RegisterSerializer, LoginSerializer, PasswordResetCheckSerializer,
-                                 PasswordResetSerializer, ProfileSerializer, PasswordResetCheckMobileSerializer,
+                                 PasswordResetSerializer, ProfileSerializer, SendOTPSerializer,
                                  VerifyCodeSerializer, VerifyNationalCodeSerializer, ChangePasswordSerializer)
 
 
@@ -71,7 +71,7 @@ class LoginAPIView(generics.GenericAPIView):
 
 
 class SendOTPAPIView(generics.GenericAPIView):
-    serializer_class = PasswordResetCheckMobileSerializer
+    serializer_class = SendOTPSerializer
     throttle_classes = [OTPThrottle]
 
     def post(self, request):
@@ -215,3 +215,8 @@ class ChangePasswordAPIView(generics.GenericAPIView):
         return Response({"detail": "The password is incorrect"})
 
 
+
+
+
+class ConfirmAuthenticationAPIView():
+    pass

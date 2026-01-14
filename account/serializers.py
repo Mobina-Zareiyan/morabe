@@ -37,7 +37,7 @@ class PasswordResetCheckSerializer(serializers.Serializer):
     mobile_number = serializers.CharField(max_length= 11, validators=[validate_mobile_number_alg])
 
 
-class PasswordResetCheckMobileSerializer(serializers.Serializer):
+class SendOTPSerializer(serializers.Serializer):
     mobile_number = serializers.CharField(max_length=11, validators=[validate_mobile_number_exist])
 
 class VerifyCodeSerializer(serializers.Serializer):

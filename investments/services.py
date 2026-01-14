@@ -291,10 +291,7 @@ def pay_investment_sale(sale: InvestmentSale, buyer: User, purchase_area: Decima
 
 @transaction.atomic
 def cancel_investment_sale(sale: InvestmentSale):
-    """
-    لغو فروش سرمایه‌گذاری قبل از اینکه خریدار مبلغ را پرداخت کند.
-    فقط فروش‌های در حال انتظار (selling) قابل لغو هستند.
-    """
+
     # 1. قفل رکوردها برای جلوگیری از race condition
     sale = InvestmentSale.objects.select_for_update().get(pk=sale.pk)
     investment = Investment.objects.select_for_update().get(pk=sale.investment_id)
