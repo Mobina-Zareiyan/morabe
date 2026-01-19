@@ -10,6 +10,11 @@ urlpatterns = [
     # برداشت
     path('withdrawal/create/', views.WithdrawRequestCreateAPIView.as_view(), name="withdrawal-create"),
     path('withdrawal/', views.WithdrawRequestListAPIView.as_view(), name="withdrawal-list"),
+    path('withdrawal/approved/<int:pk>/', views.ApproveWithdrawRequestView.as_view(), name="approve-withdrawal"),
+    path('withdrawal/reject/<int:pk>/', views.RejectWithdrawRequestView.as_view(), name="reject-withdrawal"),
+
+    # تراکنش ها
+    path("transaction/", views.TransactionAPIView.as_view(), name= 'transaction-list'),
 
     # پرداخت کیف پول
     path('deposit/create/', views.WalletDepositRequestAPIView.as_view(), name="deposit-create"),

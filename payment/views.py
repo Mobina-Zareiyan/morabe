@@ -73,7 +73,7 @@ class WithdrawRequestListAPIView(APIView):
                 "amount": r.amount,
                 "status": r.status,
                 "bank_card": f"{r.bank_card.bank_name} - {r.bank_card.card_number[-4:]}",
-                "created_at": r.created_at,
+                "created_at": r.created,
                 "reviewed_at": r.reviewed_at
             }
             for r in requests
@@ -88,7 +88,6 @@ class WithdrawRequestListAPIView(APIView):
 # ---------------------------
 # 3. اتصال به درگاه رپداخت
 # ---------------------------
-
 
 class WalletDepositRequestAPIView(APIView):
     """
@@ -172,7 +171,6 @@ class WalletDepositRequestAPIView(APIView):
 # ---------------------------
 # 4. افزایش موجودی کیف پول
 # ---------------------------
-
 
 class WalletDepositVerifyAPIView(APIView):
     """
@@ -367,18 +365,19 @@ class WalletDetailAPIView(APIView):
         serializer = WalletSerializer(wallet)
         return Response(serializer.data)
 
-# این ها درستن؟؟؟
+
+
 
 # ---------------------------
 # 10. نمایش تراکنش های کیف پول به کاربر
 # ---------------------------
-class TransactionAPIView(generics.RetrieveUpdateAPIView):
+class TransactionAPIView(generics.ListAPIView):
     serializer_class = TransactionSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
-        return self.request
-
+    def get_queryset(self):
+        user = self.request.user
+        return Transaction.objects.filter(wallet__user= user)
 
 
 
@@ -386,46 +385,31 @@ class TransactionAPIView(generics.RetrieveUpdateAPIView):
 # ---------------------------
 # 11. قبول درخواست برداشت
 # ---------------------------
-class WithdrawRequestApproveAPIView(APIView):
-    permission_classes = [IsAdminUser]
-
-    def post(self, request):
-
-        withdraw_request = WithdrawRequest.objects.filter(status= "PENDING")
-        approve_withdraw_request(
-           withdraw_request= withdraw_request
-        )
-
+class ApproveWithdrawRequestView(APIView):
+    def post(self, request, pk):
+        withdraw_request = WithdrawRequest.objects.get(pk=pk)
+        approve_withdraw_request(withdraw_request)
         return Response(
             {
                 "message": _("واریز به حساب کاربر با موفقیت به پایان رسید."),
-                "withdraw_id": withdraw_request.id,
+                "withdraw_id": pk,
                 "available_balance": withdraw_request.wallet.available_balance
             },
             status=status.HTTP_201_CREATED
         )
 
 
-
-
-
 # ---------------------------
 # 12. رد درخواست برداشت
 # ---------------------------
-class WithdrawRequestRejectAPIView(APIView):
-    permission_classes = [IsAdminUser]
-
-    def post(self, request):
-
-        withdraw_request = WithdrawRequest.objects.get(status= "PENDING")
-        reject_withdraw_request(
-           withdraw_request= withdraw_request
-        )
-
+class RejectWithdrawRequestView(APIView):
+    def post(self, request, pk):
+        withdraw_request = WithdrawRequest.objects.get(pk=pk)
+        reject_withdraw_request(withdraw_request)
         return Response(
             {
-                "message": _("واریز به حساب کاربر با موفقیت به پایان رسید."),
-                "withdraw_id": withdraw_request.id,
+                "message": _("درخواست واریز به حساب کاربر رد شد."),
+                "withdraw_id": pk,
                 "available_balance": withdraw_request.wallet.available_balance
             },
             status=status.HTTP_201_CREATED
