@@ -1,11 +1,13 @@
 # Django Module
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.text import slugify
 
 
 
 # Local Module
 from utils.models import AbstractDateTimeModel
+from seo.models import AbstractBaseSeoModel
 
 
 # Third-party
@@ -14,7 +16,7 @@ from pilkit.processors import ResizeToFill
 from ckeditor.fields import RichTextField
 
 
-class Contractor(AbstractDateTimeModel):
+class Contractor(AbstractDateTimeModel, AbstractBaseSeoModel):
     name = models.CharField(
         max_length= 150,
         verbose_name= _('نام شرکت'),

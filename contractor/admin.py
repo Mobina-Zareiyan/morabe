@@ -1,6 +1,9 @@
 from django.contrib import admin
-from .models import Contractor, Gallery, RegistrationContractor
 from django.utils.translation import gettext_lazy as _
+
+from .models import Contractor, Gallery, RegistrationContractor
+from seo.admin import SeoAdminMixin
+from utils.admin import DateTimeAdminMixin
 
 
 # ---------------------------------------------------------
@@ -26,7 +29,7 @@ class GalleryInline(admin.TabularInline):
 # Contractor Admin
 # ---------------------------------------------------------
 @admin.register(Contractor)
-class ContractorAdmin(admin.ModelAdmin):
+class ContractorAdmin(SeoAdminMixin, admin.ModelAdmin):
     list_display = (
         "name",
         "is_featured",
@@ -37,7 +40,11 @@ class ContractorAdmin(admin.ModelAdmin):
     list_editable = ("is_featured",)
     list_filter = ("is_featured",)
     search_fields = ("name", "subtitle", "description")
-    readonly_fields = ("image_preview",)
+    readonly_fields = (
+        "image_preview",
+        *DateTimeAdminMixin.readonly_fields,
+        *SeoAdminMixin.readonly_fields
+    )
     ordering = ("name",)
     inlines = [GalleryInline]
 
@@ -48,9 +55,11 @@ class ContractorAdmin(admin.ModelAdmin):
         (_("تصویر"), {
             "fields": ("image", "alt", "image_preview")
         }),
+        *SeoAdminMixin.fieldsets,
+        *DateTimeAdminMixin.fieldsets
     )
 
-    prepopulated_fields = {"slug": ("name",)} if hasattr(Contractor, "slug") else {}
+    prepopulated_fields = {"slug": ("name",)}
 
     def image_preview(self, obj):
         if obj.image_thumbnail:

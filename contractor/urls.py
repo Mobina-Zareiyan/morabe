@@ -5,6 +5,6 @@ app_name = 'contractor'
 
 urlpatterns = [
     path('contractors/', views.ContractorListAPIView.as_view(), name='contractor-list'),
-    path('contractor/<slug:slug>/', views.ContractorDetailAPIView.as_view(), name='contractor-detail'),
+    path('contractor/<str:slug>/', views.ContractorDetailAPIView.as_view(), name='contractor-detail'),
     path('registration/', views.RegistrationAPIView.as_view(), name='registration'),
 ]
