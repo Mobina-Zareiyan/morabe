@@ -33,7 +33,7 @@ def validate_mobile_number(value):
 
     if not re.match(pattern, value):
         raise ValidationError("شماره موبایل معتبر نیست")
-    if User.objects.filter(mobile=value).exists():
+    if User.objects.filter(mobile_number=value).exists():
         raise ValidationError("این شماره موبایل قبلاً ثبت شده است.")
 
     return value
@@ -56,10 +56,10 @@ def validate_mobile_number_exist(value):
     بررسی عضویت کاربر با این شماره موبایل
     """
 
-    if User.objects.filter(mobile=value).exists():
-        raise value
+    if User.objects.filter(mobile_number=value).exists():
+        return value
 
-    return ValidationError("این شماره موبایل قبلاً ثبت نشده است.")
+    raise ValidationError("این شماره موبایل قبلاً ثبت نشده است.")
 
 
 

@@ -38,15 +38,18 @@ class PasswordResetCheckSerializer(serializers.Serializer):
 
 
 class SendOTPSerializer(serializers.Serializer):
-    mobile_number = serializers.CharField(max_length=11, validators=[validate_mobile_number_exist])
+    mobile_number = serializers.CharField(max_length=11, validators=[validate_mobile_number_alg])
 
 class VerifyCodeSerializer(serializers.Serializer):
+    mobile_number = serializers.CharField(max_length=11, validators=[validate_mobile_number_exist])
     code = serializers.IntegerField()
 
 class VerifyNationalCodeSerializer(serializers.Serializer):
+    mobile_number = serializers.CharField(max_length=11, validators=[validate_mobile_number_exist])
     national_code = serializers.CharField(validators= [validate_national_code])
 
 class PasswordResetSerializer(serializers.Serializer):
+    mobile_number = serializers.CharField(max_length=11, validators=[validate_mobile_number_exist])
     new_password = serializers.CharField(write_only=True, validators=[validate_password])
     new_password1 = serializers.CharField(write_only=True, validators=[validate_password])
 
@@ -85,3 +88,10 @@ class ChangePasswordSerializer(serializers.Serializer):
         if attrs['new_password'] != attrs['new_password1']:
             raise serializers.ValidationError("رمزهای عبور مطابقت ندارند.")
         return attrs
+
+
+
+class VerifyAuthenticationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('seryal', 'video')

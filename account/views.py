@@ -3,14 +3,18 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from django.contrib.auth import authenticate
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
 
 # Local Module
 from account.models import User, OtpCode
-from account.serializers import (RegisterSerializer, LoginSerializer, PasswordResetCheckSerializer,
+from account.serializers import (RegisterSerializer, LoginSerializer, ChangePasswordSerializer,
                                  PasswordResetSerializer, ProfileSerializer, SendOTPSerializer,
-                                 VerifyCodeSerializer, VerifyNationalCodeSerializer, ChangePasswordSerializer)
+                                 VerifyCodeSerializer, VerifyNationalCodeSerializer, VerifyAuthenticationSerializer)
 
 
 
@@ -60,8 +64,8 @@ class LoginAPIView(generics.GenericAPIView):
         if not user:
             return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
-        # if not user.is_active:
-        #     return Response({"detail": "User account is inactive"}, status=status.HTTP_403_FORBIDDEN)
+        if not user.is_active:
+            return Response({"detail": "User account is inactive"}, status=status.HTTP_403_FORBIDDEN)
 
         refresh = RefreshToken.for_user(user)
         return Response({
@@ -78,10 +82,6 @@ class SendOTPAPIView(generics.GenericAPIView):
         serializer = self.get_serializer(data= request.data)
         serializer.is_valid(raise_exception=True)
         mobile = serializer.validated_data['mobile_number']
-        request.session['mobile'] = {
-            'phone_number': mobile,
-        }
-
         try:
             user = User.objects.filter(mobile_number= mobile)
             OtpCode.send_otp(mobile)
@@ -97,24 +97,17 @@ class VerifyOTPAPIView(generics.GenericAPIView):
     throttle_classes = [OTPThrottle]
 
     def post(self, request):
-        user_session = request.session['mobile']
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        mobile = serializer.validated_data['mobile_number']
+        code = serializer.validated_data['code']
 
-        try:
-            code_instance = OtpCode.objects.get(phone_number= user_session['phone_number'])
-        except OtpCode.DoesNotExist:
-            return Response({'error':'code not found'}, status= status.HTTP_404_NOT_FOUND)
+        result = OtpCode.verify_otp(mobile, code)
 
-        ser_data = VerifyCodeSerializer(data= request.data)
-        ser_data.is_valid(raise_exception= True)
-        cd = ser_data.validated_data
-        if cd['code'] == code_instance:
-
-            code_instance.is_active = False
-            code_instance.save()
-
-            return Response({"detail": "This code is correct"}, status=status.HTTP_200_OK)
-
-        return Response({'error': 'This code is wrong'}, status=status.HTTP_400_BAD_REQUEST)
+        if result['success']:
+            return Response({"detail": "کد صحیح است."}, status= status.HTTP_200_OK)
+        else:
+            return Response({"error": result['error']}, status= status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -122,11 +115,10 @@ class VerifyNationalCodeAPIView(generics.GenericAPIView):
     serializer_class = VerifyNationalCodeSerializer
 
     def post(self, request):
-        user_session = request.session['mobile']
-        mobile = user_session['phone_number']
-        user = User.objects.filter(mobile_number= mobile)
-        serializer = self.get_serializer(data= request.data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        mobile = serializer.validated_data['mobile_number']
+        user = User.objects.get(mobile_number= mobile)
         national_code = serializer.validated_data['national_code']
         if user.national_code == national_code:
             return Response({"detail": "You can change your password"}, status=status.HTTP_200_OK)
@@ -135,56 +127,38 @@ class VerifyNationalCodeAPIView(generics.GenericAPIView):
 
 
 
-# class PasswordResetCheckAPIView(generics.GenericAPIView):
-#     """
-#     بررسی کاربر و ارسال OTP برای ریست پسورد
-#     """
-#     serializer_class = PasswordResetCheckSerializer
-#     throttle_classes = [LoginRateThrottle]
-#
-#     def post(self, request):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         mobile = serializer.validated_data['mobile_number']
-#         user = User.objects.get(mobile_number=mobile)
-#
-#         try:
-#
-#             otp_code = get_random_string(length=6, allowed_chars='0123456789')
-#
-#             # اینجا از cache جنگو استفاده کنم یا خودم بنویسم تا توی db ذخیره بشه و قابل پیگیری باشه؟
-#             cache.set(f"password_reset_otp_{mobile}", otp_code, 300)
-#
-#             send_normal_sms(mobile, otp_code)
-#
-#             return Response({"detail": "OTP sent successfully"}, status=status.HTTP_200_OK)
-#
-#         except user.DoesNotExist:
-#             #  همیشه پیام موفقیت بدهیم تا کسی نتونه بفهمد کاربر وجود دارد یا نه
-#             return Response({"detail": "OTP sent successfully"}, status=status.HTTP_200_OK)
-#
-
-
 
 class PasswordResetAPIView(generics.GenericAPIView):
     serializer_class = PasswordResetSerializer
     throttle_classes = [OTPThrottle]
 
     def post(self, request):
-        user_session = request.session['mobile']
-        mobile = user_session['phone_number']
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        mobile = serializer.validated_data['mobile_number']
         new_password = serializer.validated_data['new_password']
+        otp = OtpCode.objects.filter(
+            phone_number=mobile,
+            is_verified=True,
+            is_active=False,
+            expires_at__gte=timezone.now()
+        ).order_by("-created").first()
+
+        if not otp:
+            return Response({"error": "مراحل احراز هویت کامل نشده است"},status=status.HTTP_403_FORBIDDEN)
+
 
         try:
+
             user = User.objects.get(mobile_number=mobile)
             user.set_password(new_password)
             user.save()
-            del request.session['mobile']
-            return Response({"detail": "Password updated successfully"})
+            otp.is_verified = False
+            otp.save()
+            return Response({"detail": "Password updated successfully"}, status= status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 
@@ -200,7 +174,7 @@ class ProfileAPIView(generics.RetrieveUpdateAPIView):
 
 class ChangePasswordAPIView(generics.GenericAPIView):
     serializer_class = ChangePasswordSerializer
-    parser_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = self.get_serializer(data= request.data)
@@ -208,7 +182,7 @@ class ChangePasswordAPIView(generics.GenericAPIView):
         user = request.user
         pre_password = serializer.validated_data['pre_password']
 
-        if user.password == pre_password:
+        if user.check_password(pre_password):
             new_password = serializer.validated_data['new_password']
             user.set_password(new_password)
             return Response({"detail": "Password updated successfully"})
@@ -218,5 +192,13 @@ class ChangePasswordAPIView(generics.GenericAPIView):
 
 
 
-class ConfirmAuthenticationAPIView():
-    pass
+class AuthenticationVerifyAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = VerifyAuthenticationSerializer(request.user, data= request.data, partial= True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"detail": _('اطلاعات احراز هویت ارسال شد')}, status= status.HTTP_200_OK)
+        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+

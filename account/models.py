@@ -1,9 +1,10 @@
 # Django Built-in modules
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.utils.crypto import get_random_string
+from django.utils import timezone
+
 
 
 # Local apps
@@ -19,6 +20,7 @@ import qrcode
 from io import BytesIO
 import base64
 import string
+from datetime import timedelta
 
 
 
@@ -67,7 +69,7 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
         verbose_name= _('آدرس'),
     )
     is_active = models.BooleanField(
-        default=False,
+        default= True,
         verbose_name= _('فعال'),
     )
     is_superuser = models.BooleanField(
@@ -77,6 +79,10 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
     is_staff = models.BooleanField(
         default=False,
         verbose_name= _('کارمند'),
+    )
+    is_authenticate = models.BooleanField(
+        default= False,
+        verbose_name= _('احراز هویت')
     )
     referral_code = models.CharField(
         max_length=10,
@@ -173,17 +179,54 @@ class User(AbstractBaseUser, AbstractDateTimeModel, AbstractUUIDModel, Permissio
 
 
 class OtpCode(AbstractDateTimeModel):
-    phone_number = models.CharField(max_length= 11)
-    code = models.PositiveSmallIntegerField()
-    is_active = models.BooleanField(default= True)
+    phone_number = models.CharField(
+        max_length= 11,
+        verbose_name= _("شماره موبایل")
+    )
+    code = models.PositiveSmallIntegerField(
+        verbose_name= _("کد")
+    )
+    is_active = models.BooleanField(
+        default= True,
+        verbose_name= _("فعال")
+    )
+    is_verified = models.BooleanField(
+        default= False,
+        verbose_name= _("احراز شده")
+    )
+    expires_at = models.DateTimeField(
+        null= True,
+        blank= True,
+        verbose_name= _("انقضا")
+    )
 
     @classmethod
     def send_otp(cls, phone):
         random_code = random.randint(100000, 999999)
-        cls.objects.filter(phone_number=phone, is_active=True).update(is_active=False
-                                                                      )
+        cls.objects.filter(phone_number=phone, is_active=True).update(is_active=False)
+        expiration_time = timezone.now() + timedelta(minutes= 5)
+
         send_normal_sms(phone, random_code)
-        cls.objects.create(phone_number=phone, code=random_code)
+        cls.objects.create(
+            phone_number=phone,
+            code=random_code,
+            expires_at= expiration_time
+        )
+
+    @classmethod
+    def verify_otp(cls, phone, code):
+        try:
+            otp = cls.objects.get(phone_number= phone, code= code, is_active= True)
+            if otp.expires_at < timezone.now():
+                otp.is_active = False
+                otp.save()
+                return {"success": False, "error": "کد منقضی شده است"}
+            otp.is_verified = True
+            otp.is_active = False
+            otp.save()
+            return {"success": True}
+        except cls.DoesNotExist:
+            return {"success": False, "error": "کد نامعتبر است"}
 
     class Meta:
         ordering = ('-created',)

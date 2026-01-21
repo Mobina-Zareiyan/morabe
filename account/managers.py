@@ -1,18 +1,8 @@
 import string
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import BaseUserManager
+from django.utils.translation import gettext_lazy as _
 
-
-# -----------------------------
-#   تابع تولید کد معرف یکتا
-# -----------------------------
-def generate_referral_code(length=8):
-    pass
-    # chars = string.ascii_uppercase + string.digits
-    # while True:
-    #     code = get_random_string(length= length, allowed_chars= chars)
-    #     if not "User".objects.filter(referral_code=code).exists():
-    #         return code
 
 
 # -----------------------------
@@ -33,9 +23,9 @@ class UserManager(BaseUserManager):
             **extra_fields
         )
 
-        user.referral_code = generate_referral_code()
+
         user.set_password(password)
-        # بود و نبود این چه فرقی داره؟
+        # برا چند پایگاه داده
         user.save(using=self._db)
         return user
 
@@ -44,12 +34,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
 
-        # فیلدهای اجباری
         required_fields = ['first_name', 'last_name',
                            'date_birth', 'national_code']
 
