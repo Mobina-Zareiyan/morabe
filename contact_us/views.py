@@ -12,14 +12,6 @@ class ContactUsViewSet(viewsets.ViewSet):
     - GET اطلاعات سایت و شبکه‌های اجتماعی
     """
 
-    # def get_permissions(self):
-    #     if self.action == 'create':
-    #         return [permissions.AllowAny()]
-    #     elif self.action == 'list_messages':
-    #         return [permissions.IsAdminUser()]
-    #     else:
-    #         return [permissions.AllowAny()]
-
     # -----------------------------------
     # POST برا پیام جدید
     # -----------------------------------
@@ -43,12 +35,3 @@ class ContactUsViewSet(viewsets.ViewSet):
             "site_global": site_serializer.data,
             "social_media": social_serializer.data
         })
-
-    # -----------------------------------
-    # GET تمام پیام‌ها برای ادمین
-    # -----------------------------------
-    # @action(detail=False, methods=['get'], url_path='messages', url_name='messages')
-    # def list_messages(self, request):
-    #     messages = ContactUsMessages.objects.all().order_by('-created')
-    #     serializer = ContactUsMessageSerializer(messages, many=True)
-    #     return Response(serializer.data)
