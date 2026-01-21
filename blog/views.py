@@ -1,4 +1,5 @@
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
 from .models import Blog
 from .serializers import BlogListSerializer, BlogDetailSerializer, BlogCommentSerializer, BlogComment
 
@@ -21,6 +22,7 @@ class BlogCommentCreateAPIView(generics.CreateAPIView):
     queryset = BlogComment.objects.all()
 
     def perform_create(self, serializer):
-        blog_id = self.request.data.get('blog')
-        serializer.save(blog_id=blog_id)
+        blog_id = self.kwargs['id']
+        blog = get_object_or_404(Blog, pk= blog_id)
+        serializer.save(blog= blog)
 

@@ -13,8 +13,7 @@ class BlogListSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'banner_description', 'get_image')  # لیست بلاگ‌ها
 
 class BlogDetailSerializer(serializers.ModelSerializer):
-    comments = BlogCommentSerializer(many=True, read_only=True)
-
+    comments = serializers.SerializerMethodField()
     newest_blog = serializers.SerializerMethodField()
 
     class Meta:
@@ -23,6 +22,10 @@ class BlogDetailSerializer(serializers.ModelSerializer):
             'id', 'title', 'full_description',
             'created', 'get_image', 'newest_blog', 'comments'
         )
+
+    def get_comments(self, obj):
+        visible_comment = obj.comments.filter(is_visible= True)
+        return BlogCommentSerializer(visible_comment, many= True).data
 
     def get_newest_blog(self, obj):
         return [{
