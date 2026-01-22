@@ -48,7 +48,6 @@ class CategoryAdmin(admin.ModelAdmin):
         }),
     )
 
-    # برای ساخت خودکار slug از name (اختیاری)
     prepopulated_fields = {"slug": ("name",)}
 
 

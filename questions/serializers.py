@@ -10,10 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class FAQSerializer(serializers.ModelSerializer):
-    category = serializers.SlugRelatedField(
-        slug_field="slug",
-        read_only=True
-    )
+    category = CategorySerializer()
 
     class Meta:
         model = FAQ
