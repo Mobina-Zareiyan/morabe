@@ -10,21 +10,35 @@ class ProjectStatusSerializer(serializers.ModelSerializer):
         fields = ('id', 'name')
 
 class GallerySerializer(serializers.ModelSerializer):
-    image_thumbnail = serializers.ReadOnlyField()
+    image = serializers.ImageField(use_url= True)
+    thumbnail_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Gallery
-        fields = ('id', 'image', 'image_thumbnail', 'alt')
+        fields = ('id', 'image', 'thumbnail_url', 'alt')
+
+    def get_thumbnail_url(self, obj):
+        if not getattr(obj, 'image_thumbnail', None):
+            return None
+        try:
+            return obj.image_thumbnail.url
+        except (ValueError, FileNotFoundError):
+            return None
+
 
 class ProjectProgressReportSerializer(serializers.ModelSerializer):
+    pdf = serializers.FileField(use_url= True)
+
     class Meta:
         model = ProjectProgressReport
-        fields = ('id', 'pdf', 'project')
+        fields = ('id', 'pdf')
 
 class ProjectDocumentsSerializer(serializers.ModelSerializer):
+    pdf = serializers.FileField(use_url= True)
+
     class Meta:
         model = ProjectDocuments
-        fields = ('id', 'pdf', 'project')
+        fields = ('id', 'pdf')
 
 
 
@@ -34,7 +48,7 @@ class ProjectListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('id', 'title', 'province', 'city', 'profit_to_date', 'invest_start_from', 'estimated_completion_date',
-                  'status', 'start_date', 'is_featured' )
+                  'status', 'start_date', 'is_featured', 'slug' )
 
 
 
