@@ -61,7 +61,7 @@ class Contractor(AbstractDateTimeModel, AbstractBaseSeoModel):
 
     class Meta:
         verbose_name = _('سازنده')
-        verbose_name_plural = _('سازنده ها')
+        verbose_name_plural = _('سازندگان')
 
 
     def __str__(self):

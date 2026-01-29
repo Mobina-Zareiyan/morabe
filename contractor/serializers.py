@@ -17,12 +17,13 @@ class GallerySerializer(serializers.ModelSerializer):
         return None
 
     def get_thumbnail_url(self, obj):
+        if not obj.image_thumbnail:
+            return None
+
         try:
-            if obj.image_thumbnail:
-                return obj.image_thumbnail.url
-        except:
-            pass
-        return None
+            return obj.image_thumbnail.url
+        except (ValueError, FileNotFoundError):
+            return None
 
 
 
