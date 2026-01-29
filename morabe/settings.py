@@ -1,4 +1,6 @@
 from pathlib import Path
+from .unfold_settings import *
+from datetime import timedelta
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,6 +23,10 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # Django Build-in
+    'unfold',
+    'unfold.contrib.forms',
+    'unfold.contrib.inlines',
+    'unfold.contrib.filters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,6 +59,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'imagekit',
     'ckeditor',
+    'drf_standardized_errors',
+
 
 ]
 
@@ -174,6 +182,10 @@ REST_FRAMEWORK = {
         'anon': '10/min',
         'user': '5/min',
     },
+    "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
+    'DEFAULT_RENDERER_CLASSES':(
+        'utils.renderers.CustomRenderer',
+    ),
     # 'DEFAULT_RENDERER_CLASSES':(
     #     'utils.renderers.CustomRenderer',
     # ),
@@ -188,6 +200,24 @@ SPECTACULAR_SETTINGS = {
     'SCHEMA_PATH_PREFIX': r'/api/v1',
 
 }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+
+# UNFOLD = {
+#     "SIDEBAR": {
+#         "show_all_applications": True,
+#     },
+#
+# }
+# UNFOLD = {
+#     "DASHBOARD_CALLBACK": "unfold_admin.admin.dashboard_callback",
+# }
+
+
+
 
 MEDIANA_API_KEY = ""
 
