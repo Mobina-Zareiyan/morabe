@@ -33,6 +33,7 @@ class UserManager(BaseUserManager):
 
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_authenticate', True)
 
 
         required_fields = ['first_name', 'last_name',
