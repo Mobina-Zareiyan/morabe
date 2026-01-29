@@ -14,11 +14,13 @@ class Wallet(AbstractDateTimeModel):
     )
     balance = models.BigIntegerField(
         default=0,
-        verbose_name= _("موجودی کل")
+        verbose_name= _("موجودی کل"),
+        help_text = _("تومان"),
     )
     blocked_balance = models.BigIntegerField(
         default=0,
-        verbose_name= _("موجودی بلوکه شده")
+        verbose_name= _("موجودی بلوکه شده"),
+        help_text=_("تومان"),
     )
     is_active = models.BooleanField(
         default=True,
