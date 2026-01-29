@@ -21,6 +21,7 @@ from io import BytesIO
 import base64
 import string
 from datetime import timedelta
+import secrets
 
 
 
@@ -183,7 +184,8 @@ class OtpCode(AbstractDateTimeModel):
         max_length= 11,
         verbose_name= _("شماره موبایل")
     )
-    code = models.PositiveSmallIntegerField(
+    code = models.CharField(
+        max_length= 6,
         verbose_name= _("کد")
     )
     is_active = models.BooleanField(
@@ -202,7 +204,7 @@ class OtpCode(AbstractDateTimeModel):
 
     @classmethod
     def send_otp(cls, phone):
-        random_code = random.randint(100000, 999999)
+        random_code = ''.join([str(secrets.randbelow(10))for _ in range(6)])
         cls.objects.filter(phone_number=phone, is_active=True).update(is_active=False)
         expiration_time = timezone.now() + timedelta(minutes= 5)
 

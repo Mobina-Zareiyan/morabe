@@ -9,7 +9,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     mobile_number = serializers.CharField(required= True, max_length=11, validators=[validate_mobile_number])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     referral_code = serializers.CharField(required=False, allow_blank=True, validators=[validate_referral_code])
-    national_code = serializers.CharField(validators= [validate_national_code, validate_national_code_unique])
+    national_code = serializers.CharField(validators= [validate_national_code_unique])
 
     class Meta:
         model = User

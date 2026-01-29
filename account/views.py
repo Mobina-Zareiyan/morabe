@@ -197,8 +197,6 @@ class AuthenticationVerifyAPIView(APIView):
 
     def post(self, request):
         serializer = VerifyAuthenticationSerializer(request.user, data= request.data, partial= True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"detail": _('اطلاعات احراز هویت ارسال شد')}, status= status.HTTP_200_OK)
-        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-
+        serializer.is_valid(raise_exception= True)
+        serializer.save()
+        return Response({"detail": _('اطلاعات احراز هویت ارسال شد')}, status=status.HTTP_200_OK)
