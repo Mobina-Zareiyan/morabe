@@ -1,8 +1,8 @@
-# Djdngo Module
+# Django Built-in Modules
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-# Local Module
+# Local Apps
 from utils.admin import DateTimeAdminMixin
 from .models import ContactUsMessages
 

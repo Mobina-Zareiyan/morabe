@@ -1,8 +1,13 @@
-from rest_framework import serializers
-from account.models import User
+# Django Built-in Modules
 from django.contrib.auth.password_validation import validate_password
+
+# Local Apps
+from account.models import User
 from .validators import (validate_mobile_number, validate_national_code, validate_national_code_unique,
                          validate_referral_code, validate_mobile_number_alg, validate_mobile_number_exist)
+
+# Third Party Packages
+from rest_framework import serializers
 
 
 class RegisterSerializer(serializers.ModelSerializer):

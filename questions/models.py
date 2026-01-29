@@ -1,10 +1,12 @@
-# Django Module
+# Django Built-in Modules
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# Local Module
+# Local Apps
 from utils.models import AbstractDateTimeModel
 from seo.models import AbstractBaseSeoModel
+
+
 
 class Category(AbstractBaseSeoModel, AbstractDateTimeModel):
     name = models.CharField(

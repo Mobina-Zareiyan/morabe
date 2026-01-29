@@ -1,6 +1,9 @@
+# Django Built-in Modules
 from django.contrib import admin
-from .models import Category, FAQ
 from django.utils.translation import gettext_lazy as _
+
+# Local Apps
+from .models import Category, FAQ
 
 
 

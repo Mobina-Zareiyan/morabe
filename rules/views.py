@@ -1,6 +1,11 @@
-from rest_framework import viewsets
+# Local Apps
 from .models import Rules
 from .serializers import RulesSerializer
+
+# Third Party Packages
+from rest_framework import viewsets
+
+
 
 class RulesViewSet(viewsets.ReadOnlyModelViewSet):
     """

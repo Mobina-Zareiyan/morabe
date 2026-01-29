@@ -1,5 +1,8 @@
-from rest_framework import serializers
+# Local Apps
 from .models import Project, ProjectStatus, ProjectDocuments, ProjectProgressReport, Gallery
+
+# Third Party Packages
+from rest_framework import serializers
 
 
 

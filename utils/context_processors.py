@@ -1,7 +1,9 @@
-# Django Module
+# Django Built-in Modules
 from django.utils import translation
-# Local Module
+
+# Local Apps
 from payment.models import WithdrawRequest
+
 
 def setting(request):
     withdraw_requests = WithdrawRequest.objects.all()

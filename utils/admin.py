@@ -1,7 +1,9 @@
+# Django Built-in Modules
 from django.contrib import admin
 from django.utils.html import mark_safe # اگه نیاز شد جایی از html استفاده کنیم نیازه که این باشه
 from django.utils.translation import gettext_lazy as _
 
+# Local Apps
 from seo.admin import SeoAdminMixin
 
 

@@ -1,6 +1,9 @@
-from rest_framework import generics
+# Local Apps
 from .models import Project
 from .serializers import ProjectListSerializer, ProjectSerializer
+
+# Third Party Packages
+from rest_framework import generics
 
 
 

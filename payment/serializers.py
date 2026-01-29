@@ -1,7 +1,11 @@
+# Django Built-in Modules
 from rest_framework import serializers
-from django.utils.translation import gettext_lazy as _
 
+# Local Apps
 from .models import CreditCard, SuggestedDepositAmount, Wallet, Transaction, WithdrawRequest
+
+# Third Party Packages
+from django.utils.translation import gettext_lazy as _
 
 
 class WithdrawRequestSerializer(serializers.Serializer):

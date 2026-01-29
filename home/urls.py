@@ -1,7 +1,12 @@
+# Django Built-in Modules
 from django.urls import path, include
+
+# local Apps
 from . import views
-from rest_framework.routers import DefaultRouter
 from .views import FAQViewSet
+
+# Third Party Packages
+from rest_framework.routers import DefaultRouter
 
 
 app_name = "home"

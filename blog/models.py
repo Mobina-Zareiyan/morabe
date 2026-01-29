@@ -1,15 +1,17 @@
-# Django Module
+# Django Built-in Modules
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# Third Party
+# Local Apps
+from utils.models import AbstractDateTimeModel
+from seo.models import AbstractBaseSeoModel
+
+# Third Party Packages
 from ckeditor.fields import RichTextField
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
 
-# Local Module
-from utils.models import AbstractDateTimeModel
-from seo.models import AbstractBaseSeoModel
+
 
 class Blog(AbstractDateTimeModel, AbstractBaseSeoModel):
     title= models.CharField(

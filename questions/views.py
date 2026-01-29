@@ -1,10 +1,14 @@
-# views.py
+# Django Built-in Modules
+from django.shortcuts import get_object_or_404
+
+# Local Apps
+from .models import Category, FAQ
+from .serializers import CategorySerializer, FAQSerializer
+
+# third Party Packages
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Category, FAQ
-from .serializers import CategorySerializer, FAQSerializer
-from django.shortcuts import get_object_or_404
 
 class FAQViewSet(viewsets.ViewSet):
     """

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 
-# Local apps
+# Local Apps
 from .models import Province, City
 from utils.admin import DateTimeAdminMixin
 

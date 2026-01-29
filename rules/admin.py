@@ -1,4 +1,7 @@
+# Django Built-in Modules
 from django.contrib import admin
+
+# Local Apps
 from .models import Rules
 from utils.admin import DateTimeAdminMixin
 

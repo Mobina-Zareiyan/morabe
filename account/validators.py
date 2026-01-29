@@ -1,6 +1,12 @@
+# Django Built-in Modules
 from django.core.exceptions import ValidationError
-import re
+
+# Local Apps
 from .models import User
+
+# Third Party Packages
+import re
+
 
 def validate_national_code(value):
     """

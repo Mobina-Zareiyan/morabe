@@ -1,4 +1,7 @@
+# Django Built-in Modules
 from django.contrib import admin
+
+# Local Apps
 from .models import Wallet, CreditCard, Transaction, WithdrawRequest, SuggestedDepositAmount
 from utils.admin import DateTimeAdminMixin
 
@@ -19,9 +22,9 @@ class WalletAdmin(admin.ModelAdmin):
     list_filter = ("is_active",)
     search_fields = ("user__fullname",)
     readonly_fields = (
-        "balance",
+        # "balance",
         "blocked_balance",
-        "available_balance",
+        # "available_balance",
         "user",
         *DateTimeAdminMixin.readonly_fields,
     )

@@ -1,9 +1,11 @@
 # Django Module
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedUser
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
+
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
@@ -14,16 +16,18 @@ from decimal import Decimal
 # Local Module
 from .models import Investment, InvestmentSale
 from .serializers import (InvestmentQuoteSerializer, InvestmentCreateSerializer,
-                          InvestmentSaleQuoteSerializer, InvestmentSaleCreateSerializer,
+                          InvestmentSaleQuoteSerializer, InvestmentSaleCreateSerializer, CreateInvestmentSaleSerializer,
                           InvestmentDetailSerializer, InvestmentSaleDetailSerializer)
 
 from .services import pay_investment, pay_investment_sale, cancel_investment_sale
+from .domain import PaymentSuccess, CapacityExceeded, ExpiredInvestment
 
 
 
 
 class InvestmentQuoteAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    serializer_class = InvestmentQuoteSerializer
+    permission_classes = [IsAuthenticatedUser]
 
     def post(self, request):
         serializer = InvestmentQuoteSerializer(data=request.data)
@@ -35,7 +39,7 @@ class InvestmentQuoteAPIView(APIView):
 
 class InvestmentCreateAPIView(generics.CreateAPIView):
     serializer_class = InvestmentCreateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedUser]
 
     def get_serializer_context(self):
         return {"request": self.request}
@@ -45,7 +49,7 @@ class InvestmentCreateAPIView(generics.CreateAPIView):
 
 
 class InvestmentPayAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedUser]
 
     def post(self, request, pk):
         investment = get_object_or_404(
@@ -54,7 +58,13 @@ class InvestmentPayAPIView(APIView):
             user=request.user
         )
 
-        pay_investment(investment)
+        result = pay_investment(investment)
+
+        if isinstance(result, ExpiredInvestment):
+            raise ValidationError("مهلت پرداخت این سفارش به پایان رسیده است")
+
+        if isinstance(result, CapacityExceeded):
+            raise ValidationError(_("ظرفیت متراژی پروژه تکمیل شده است"))
 
         return Response({
             "detail": _("پرداخت با موفقیت انجام شد")
@@ -69,8 +79,19 @@ class InvestmentDetailAPIVew(APIView):
         return Response(serializer.data)
 
 
+class CreateInvestmentSaleAPIView(APIView):
+    permission_classes = [IsAuthenticatedUser]
+
+    def post(self, request):
+        serializer = CreateInvestmentSaleSerializer(data= request.data)
+        serializer.is_valid(raise_exception= True)
+
+        pass
+
+
+
 class InvestmentSaleQuoteAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedUser]
 
     def post(self, request):
         serializer = InvestmentSaleQuoteSerializer(data=request.data)
@@ -81,7 +102,7 @@ class InvestmentSaleQuoteAPIView(APIView):
 
 class InvestmentSaleCreateAPIView(generics.CreateAPIView):
     serializer_class = InvestmentSaleCreateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedUser]
 
     def get_serializer_context(self):
         return {"request": self.request}
@@ -90,7 +111,7 @@ class InvestmentSaleCreateAPIView(generics.CreateAPIView):
 
 
 class InvestmentSalePayAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedUser]
 
     def post(self, request, pk):
         sale = get_object_or_404(InvestmentSale, pk=pk, status="selling")
@@ -107,7 +128,7 @@ class InvestmentSalePayAPIView(APIView):
 
 
 class InvestmentSaleCancelAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedUser]
 
     def post(self, request, pk):
         # دریافت sale و اطمینان از مالک بودن فروش

@@ -1,5 +1,9 @@
-from rest_framework import serializers
+# Local Apps
 from .models import Blog, BlogComment
+
+# Third Party Packages
+from rest_framework import serializers
+
 
 class BlogCommentSerializer(serializers.ModelSerializer):
     class Meta:

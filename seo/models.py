@@ -4,12 +4,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.utils.translation import gettext_lazy as _
 
-
 # Local Apps
 from utils.models import AbstractDateTimeModel
 
 # Third Party Packages
 from ckeditor_uploader.fields import RichTextUploadingField
+
 
 
 class BaseSeoModelQueryset(models.QuerySet):

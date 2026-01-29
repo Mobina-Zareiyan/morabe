@@ -1,9 +1,9 @@
-# Django Module
-from rest_framework import generics, permissions
-
-# Local Module
+# Local Apps
 from .models import Contractor, RegistrationContractor
 from .serializers import ContractorListSerializer, ContractorSerializer, RegistrationContractorSerializer
+
+# Third Party Packages
+from rest_framework import generics, permissions
 
 
 class ContractorListAPIView(generics.ListAPIView):

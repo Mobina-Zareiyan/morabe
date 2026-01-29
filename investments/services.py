@@ -16,6 +16,7 @@ from payment.models import Wallet
 from project.models import Project
 from .models import Investment , InvestmentSale
 from account.models import User
+from .domain import PaymentSuccess, CapacityExceeded, ExpiredInvestment
 
 
 
@@ -45,12 +46,14 @@ def pay_investment(investment):
     if investment.expires_at and investment.expires_at < timezone.now():
         investment.status = "canceled"
         investment.save(update_fields=["status"])
-        raise ValidationError(_("مهلت پرداخت این سفارش به پایان رسیده است"))
+        return ExpiredInvestment()
+        # raise ValidationError(_("مهلت پرداخت این سفارش به پایان رسیده است"))
 
     if investment.area > project.remaining_area:
         investment.status = "canceled"
         investment.save(update_fields=["status"])
-        raise ValidationError(_("ظرفیت متراژی پروژه تکمیل شده است"))
+        return CapacityExceeded()
+        # raise ValidationError(_("ظرفیت متراژی پروژه تکمیل شده است"))
 
     wallet.balance -= investment.total_payment
     wallet.save()
@@ -104,16 +107,17 @@ def calculate_investment_amounts(*, project, area):
 
     real_remaining_area = project.investable_area - project.sold_area
     quote_remaining_area = get_project_remaining_area_for_quote(project)
+    reserving_area = get_project_pending_area(project)
 
     if area > quote_remaining_area:
-        if real_remaining_area <= 0:
+        if real_remaining_area <= 0 or area > real_remaining_area:
             raise ValidationError({
                 "detail": _("ظرفیت پروژه تکمیل شده است")
             })
         else:
             raise ValidationError({
-                "detail": _("ظرفیت پروژه به‌صورت موقت رزرو شده است. لطفاً دقایقی بعد دوباره تلاش کنید."),
-                "remaining_area": quote_remaining_area,
+                "detail": _(f"{reserving_area}از ظرفیت پروژه رزرو شده است."),
+                "remaining_area": real_remaining_area,
                 "entered_area": area,
                 "max_allowed_area": quote_remaining_area
             })
@@ -125,6 +129,60 @@ def calculate_investment_amounts(*, project, area):
         "tax_amount": int(tax_amount),
         "total_payment": int(total_payment),
     }
+
+
+
+
+@transaction.atomic
+def create_pending_investment(user, project, area, pay_immediately = True):
+    # الان سیستم کاملا ضد race شده
+
+    project = Project.objects.select_for_update().get(pk=project.pk)
+    wallet = Wallet.objects.select_for_update().get(user=user)
+
+    amounts = calculate_investment_amounts(project=project, area=area)
+
+
+
+
+
+    if wallet.balance < amounts:
+        raise ValidationError(_("موجودی کیف پول کافی نیست"))
+
+    investment = Investment.objects.create(
+
+    )
+
+    if investment.expires_at and investment.expires_at < timezone.now():
+        investment.status = "canceled"
+        investment.save(update_fields=["status"])
+        return ExpiredInvestment()
+        # raise ValidationError(_("مهلت پرداخت این سفارش به پایان رسیده است"))
+
+    if investment.area > project.remaining_area:
+        investment.status = "canceled"
+        investment.save(update_fields=["status"])
+        return CapacityExceeded()
+        # raise ValidationError(_("ظرفیت متراژی پروژه تکمیل شده است"))
+
+    wallet.balance -= investment.total_payment
+    wallet.save()
+
+    project.current_funding += investment.base_amount
+    project.save()
+
+    investment.status = "paid"
+    investment.save()
+
+
+
+    return investment
+
+
+
+
+
+
 
 
 

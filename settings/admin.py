@@ -1,11 +1,11 @@
-# Django Built-in
+# Django Built-in Modules
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-
-# Local
+# Local Apps
 from utils.admin import DateTimeAdminMixin
 from .models import SiteGlobalSetting, SocialMediaSetting
+
 
 
 @admin.register(SiteGlobalSetting)

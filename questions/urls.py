@@ -1,7 +1,13 @@
-# urls.py
+# Django Built-in Modules
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+
+# Local Apps
 from .views import FAQViewSet
+
+# Third Party Packages
+from rest_framework.routers import DefaultRouter
+
+
 app_name = 'faqs'
 router = DefaultRouter()
 router.register(r'faqs', FAQViewSet, basename='faqs')

@@ -1,13 +1,7 @@
-# Django Module
-from drf_spectacular.helpers import forced_singular_serializer
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
+# Django Built-in Modules
 from django.shortcuts import get_object_or_404
 
-
-# Local Module
+# Local Apps
 from questions.models import Category, FAQ
 from questions.serializers import CategorySerializer, FAQSerializer
 from contractor.models import Contractor
@@ -17,6 +11,11 @@ from project.serializers import ProjectListSerializer
 from investments.models import InvestmentSale
 from investments.serializers import InvestmentSaleDetailSerializer
 
+# Third Party Packages
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import generics
 
 
 # ---------------------------

@@ -1,17 +1,11 @@
-# Django Module
-import requests
+# Django Built-in Modules
 from django.conf import settings
-from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework import status
 from django.db import transaction
 from django.db import transaction as db_transaction
 from django.utils.translation import gettext_lazy as _
 
 
-# Local Module
+# Local Apps
 from .serializers import (WithdrawRequestSerializer, DepositSerializer,
                           SuggestedDepositAmountSerializer, CreditCardSerializer, WalletSerializer,
                           TransactionSerializer)
@@ -19,6 +13,13 @@ from .services import create_withdraw_request, reject_withdraw_request, approve_
 from .models import WithdrawRequest, Transaction, SuggestedDepositAmount, CreditCard, Wallet
 from morabe import settings
 
+# Third Party Packages
+import requests
+from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework import status
 
 
 

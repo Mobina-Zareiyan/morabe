@@ -1,18 +1,16 @@
-# Django Module
+# Django Built-in Modules
 from django.db import models
 from django.core.validators import FileExtensionValidator, ValidationError
 from django.db.models import Sum
 from django.utils.translation import gettext_lazy as _
 
-
-
-# Local Module
+# Local Apps
 from utils.models import AbstractDateTimeModel
 from seo.models import AbstractBaseSeoModel
 from areas.models import Province, City
 
 
-# Third-party
+# Third Party Packages
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
 from decimal import Decimal

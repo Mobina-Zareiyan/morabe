@@ -1,5 +1,8 @@
+# Django Built-in Modules
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+# Local Apps
 from payment.models import User, Wallet
 
 

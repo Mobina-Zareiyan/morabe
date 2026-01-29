@@ -1,16 +1,12 @@
-# Django Module
+# Django Built-in Modules
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.utils.text import slugify
 
-
-
-# Local Module
+# Local Apps
 from utils.models import AbstractDateTimeModel
 from seo.models import AbstractBaseSeoModel
 
-
-# Third-party
+# Third Party Packages
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
 from ckeditor.fields import RichTextField

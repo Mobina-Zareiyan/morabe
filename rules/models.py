@@ -1,13 +1,14 @@
-# Django Module
+# Django Built-in Modules
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+# Local Apps
+from utils.models import AbstractDateTimeModel
 
-# Third Party
+# Third Party Packages
 from ckeditor.fields import RichTextField
 
-# Local Module
-from utils.models import AbstractDateTimeModel
+
 
 
 class Rules(AbstractDateTimeModel):

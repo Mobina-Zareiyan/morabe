@@ -1,0 +1,32 @@
+.object-tools > li:first-child  {
+    display: none;
+}
+
+.object-tools > li:nth-child(2) {
+    display: none;
+}
+
+/* ul {
+    flex-wrap: wrap;
+} */
+
+/* div[x-show*=activeTab] > ul {
+    flex-wrap: wrap;
+}
+
+[class^="field-"] {
+    text-align: right;
+ 
+} */
+
+/* Make the flex container a grid */
+
+
+/* div.flex.flex-row.grow.font-semibold.items-center {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0.25rem;
+    padding: 0 0.5rem;
+    font-size: 0.875rem;
+    color: inherit;
+} */

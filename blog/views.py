@@ -1,7 +1,13 @@
-from rest_framework import generics
+# Django Built-in Modules
 from django.shortcuts import get_object_or_404
+
+# Local Apps
 from .models import Blog
 from .serializers import BlogListSerializer, BlogDetailSerializer, BlogCommentSerializer, BlogComment
+
+# Third Party Packages
+from rest_framework import generics
+
 
 class BlogListAPIView(generics.ListAPIView):
     queryset = Blog.objects.all()

@@ -1,5 +1,8 @@
-from rest_framework import serializers
+# Local Apps
 from .models import Category, FAQ
+
+# Third Party Packages
+from rest_framework import serializers
 
 
 

@@ -53,7 +53,8 @@ class Investment(AbstractDateTimeModel):
             ('paid', _('پرداخت شده')),
             ('canceled', _('لغو شده')),
         ),
-        default = 'pending'
+        default = 'pending',
+        verbose_name= _("وضعیت")
     )
     expires_at = models.DateTimeField(
         null= True,
@@ -81,8 +82,7 @@ class Investment(AbstractDateTimeModel):
         return self.area - self.sold_area - self.locked_area
 
     class Meta:
-        # اینجا ممکن هست که کاربر یدونه pending الکی داشته باشه و بعدا بخاطرش نتونه دیگه خریدی انجام بده؟؟؟
-        # بررسی کنم ببینم جایی هست که بعد از حذف درخواست قبلی pending رو براش ممنقضی نکنه
+
         constraints = [
             UniqueConstraint(
                 fields=["user", "project"],

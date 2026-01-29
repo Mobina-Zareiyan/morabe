@@ -1,7 +1,12 @@
-# account/urls.py
+# Django Built-in Modules
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+
+# Local Apps
 from . import views
+
+# Third Party Packages
+from rest_framework.routers import DefaultRouter
+
 
 app_name = 'account'
 router = DefaultRouter()

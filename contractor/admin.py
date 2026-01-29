@@ -1,9 +1,12 @@
+# Django Built-in Modules
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
+# Local Apps
 from .models import Contractor, Gallery, RegistrationContractor
 from seo.admin import SeoAdminMixin
 from utils.admin import DateTimeAdminMixin
+
 
 
 # ---------------------------------------------------------

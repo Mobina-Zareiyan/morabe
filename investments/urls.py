@@ -14,7 +14,10 @@ urlpatterns = [
     # پرداخت investment
     path("investments/<int:pk>/pay/", views.InvestmentPayAPIView.as_view(), name="investment-pay"),
 
-    # investment sale گرفتن quote
+    # ساخت investment sale
+    # path('investments/create/sale/', views.),
+
+    # investment sale برای quote گرفتن
     path("investments/sale/quote/", views.InvestmentSaleQuoteAPIView.as_view(), name= "investment-sale-quote"),
 
     # investment sale (selling)

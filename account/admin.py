@@ -1,8 +1,8 @@
-# Django Module
+# Django Built-in Modules
 from django.contrib.auth.admin import Group
 from django.contrib import admin
 
-# Local Module
+# Local Apps
 from .models import User, OtpCode
 
 

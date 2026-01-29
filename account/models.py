@@ -1,19 +1,16 @@
-# Django Built-in modules
+# Django Built-in Modules
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils.crypto import get_random_string
 from django.utils import timezone
 
-
-
-# Local apps
+# Local Apps
 from utils.models import AbstractDateTimeModel, AbstractUUIDModel
 from .managers import UserManager
 from utils.services import send_normal_sms
 
-
-# Python Standard Library
+# Third Party Packages
 import uuid as _uuid
 import random
 import qrcode

@@ -1,5 +1,8 @@
-import requests
+# Local Apps
 from morabe import settings
+
+# Third Party Packages
+import requests
 
 
 

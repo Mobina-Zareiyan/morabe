@@ -57,7 +57,7 @@ class InvestmentAdmin(admin.ModelAdmin):
             "fields": ("user",)
         }),
         (_("اطلاعات پروژه"), {
-            "fields": ("project", "area")
+            "fields": ("project", "area", "expires_at")
         }),
         (_("جزئیات مالی"), {
             "fields": (
@@ -87,11 +87,11 @@ class InvestmentAdmin(admin.ModelAdmin):
 
     user_mobile.short_description = _("شماره موبایل")
 
-    def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
+    # def has_add_permission(self, request):
+    #     return False
+    #
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
 
 
 

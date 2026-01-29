@@ -1,13 +1,12 @@
-# Django Module
+# Django Built-in Modules
 from django.db import models
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-
-# Third Party
+# Local Apps
 from .jdatetime import standard_jalali_datetime_format, pretty_jalali_datetime_format
 
-# Python package
+# Third Party Packages
 from uuid import uuid4
 
 

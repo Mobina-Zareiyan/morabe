@@ -1,7 +1,8 @@
+# Django Built-in Modules
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-
+# Local Apps
 from utils.admin import DateTimeAdminMixin
 from seo.admin import SeoAdminMixin
 from .models import (
@@ -44,10 +45,8 @@ class ProjectDocumentsInline(admin.TabularInline):
 @admin.register(Project)
 class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
     list_display = (
-        'title', 'province', 'city', 'usage_type',
-        'get_contractors', 'status', 'price_per_meter',
-        'created',  # از AbstractDateTimeModel
-        'page_display_status', 'is_featured'
+        'title', 'province', 'city', 'usage_type', 'get_contractors', 'status', 'price_per_meter', 'created',
+        'page_display_status', 'is_featured', 'remaining_area', 'sold_area',
     )
 
     list_filter = (
@@ -63,6 +62,8 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
     readonly_fields = (
         *DateTimeAdminMixin.readonly_fields,
         *SeoAdminMixin.readonly_fields,
+        'display_sold_area_readonly',
+        'display_remaining_area_readonly',
     )
 
     fieldsets = (
@@ -91,6 +92,8 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
                 'total_area',
                 'usable_area',
                 'complete_area',
+                'display_sold_area_readonly',
+                'display_remaining_area_readonly',
             )
         }),
 
@@ -136,6 +139,16 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
         ProjectProgressReportInline,
         ProjectDocumentsInline,
     ]
+
+    def display_sold_area_readonly(self, obj):
+        return f"✅ متراژ فروخته شده: {obj.sold_area:,} متر"
+
+    display_sold_area_readonly.short_description = _("متراژ فروخته شده")
+
+    def display_remaining_area_readonly(self, obj):
+        return f"⏳ متراژ باقیمانده: {obj.remaining_area:,} متر"
+
+    display_remaining_area_readonly.short_description = _("متراژ باقیمانده")
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

@@ -1,8 +1,8 @@
-# Django Built-in modules
+# Django Built-in Modules
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# Local apps
+# Local Apps
 from utils.models import AbstractDateTimeModel
 
 
