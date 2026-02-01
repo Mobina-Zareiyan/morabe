@@ -4,13 +4,10 @@ from django.urls import path, include
 # Local Apps
 from . import views
 
-# Third Party Packages
-from rest_framework.routers import DefaultRouter
 
 app_name = 'contact_us'
-router = DefaultRouter()
-router.register(r'contact-us', views.ContactUsViewSet, basename='contact-us')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("contact_us/", views.ContactUsMessageAPIView.as_view(), name= "contact-us"),
+    path("contact_us/detail/", views.ContactUsPageDetail.as_view(), name= "page-detail"),
 ]

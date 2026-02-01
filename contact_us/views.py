@@ -1,39 +1,28 @@
 # Local Apps
 from settings.models import SiteGlobalSetting, SocialMediaSetting
-from .serializers import ContactUsMessageSerializer, SiteGlobalSettingSerializer, SocialMediaSettingSerializer
+from .serializers import ContactUsMessageSerializer, ContactUsPageDataSerializer
 
 # Third Party Packages
-from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework import generics
 
 
-class ContactUsViewSet(viewsets.ViewSet):
-    """
-    ViewSet ترکیبی برای صفحه Contact Us:
-    - POST پیام جدید
-    - GET اطلاعات سایت و شبکه‌های اجتماعی
-    """
 
-    # -----------------------------------
-    # POST برا پیام جدید
-    # -----------------------------------
-    def create(self, request):
-        serializer = ContactUsMessageSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+class ContactUsMessageAPIView(generics.CreateAPIView):
+    serializer_class = ContactUsMessageSerializer
 
-    # -----------------------------------
-    # GET برا اطلاعات سایت و شبکه‌ها
-    # -----------------------------------
-    def list(self, request):
+
+class ContactUsPageDetail(generics.GenericAPIView):
+    serializer_class = ContactUsPageDataSerializer
+
+    def get(self, request):
         site_settings = SiteGlobalSetting.objects.first()
         social_media = SocialMediaSetting.objects.all()
 
-        site_serializer = SiteGlobalSettingSerializer(site_settings)
-        social_serializer = SocialMediaSettingSerializer(social_media, many=True)
+        data = {
+            "site_settings": site_settings,
+            "social_media": social_media
+        }
 
-        return Response({
-            "site_global": site_serializer.data,
-            "social_media": social_serializer.data
-        })
+        serializer = self.get_serializer(data)
+        return Response (serializer.data)
