@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 
 # Local Apps
 from .models import Category, FAQ
-from .serializers import CategorySerializer, FAQSerializer, CategoryWithFAQSerializer
+from .serializers import CategoryWithFAQSerializer
 
 
 # third Party Packages

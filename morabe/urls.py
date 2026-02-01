@@ -18,7 +18,7 @@ api_v1_urlpatterns = [
     # Blog
     path('blog/', include('blog.urls', namespace='blog')),
     # Faqs
-    path('faqs/', include('questions.urls', namespace='faqs')),
+    path('faqs/', include('faqs.urls', namespace='faqs')),
     # Rules
     path('rules/', include('rules.urls', namespace='rules')),
     # Contact Us

@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('question', models.CharField(max_length=255, verbose_name='صورت سؤال')),
                 ('answer', models.TextField(verbose_name='پاسخ')),
                 ('is_featured', models.BooleanField(default=False, verbose_name='نمایش در صفحه اصلی؟')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='faqs', to='questions.category', verbose_name='دسته\u200cبندی موضوع')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='faqs', to='faqs.category', verbose_name='دسته\u200cبندی موضوع')),
             ],
             options={
                 'verbose_name': 'سؤال متداول',

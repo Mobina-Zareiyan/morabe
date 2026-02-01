@@ -196,6 +196,7 @@ class ChangePasswordAPIView(generics.GenericAPIView):
 
 class AuthenticationVerifyAPIView(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = VerifyAuthenticationSerializer
 
     def post(self, request):
         serializer = VerifyAuthenticationSerializer(request.user, data= request.data, partial= True)

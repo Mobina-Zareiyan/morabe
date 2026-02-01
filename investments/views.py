@@ -1,27 +1,24 @@
-# Django Module
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedUser
-from rest_framework.response import Response
-from rest_framework import generics
-from rest_framework import status
-from rest_framework.exceptions import ValidationError
-
+# Django Built-in Modules
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
-
-# Third Party Module
-from decimal import Decimal
-
-# Local Module
+# Local Apps
 from .models import Investment, InvestmentSale
 from .serializers import (InvestmentQuoteSerializer, InvestmentCreateSerializer,
                           InvestmentSaleQuoteSerializer, InvestmentSaleCreateSerializer, CreateInvestmentSaleSerializer,
                           InvestmentDetailSerializer, InvestmentSaleDetailSerializer)
 
 from .services import pay_investment, pay_investment_sale, cancel_investment_sale
-from .domain import PaymentSuccess, CapacityExceeded, ExpiredInvestment
+from .domain import CapacityExceeded, ExpiredInvestment
 
+# Third Party Packages
+from decimal import Decimal
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedUser
+from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
 
 
 

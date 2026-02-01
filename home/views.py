@@ -1,9 +1,9 @@
 # Django Built-in Modules
-from django.shortcuts import get_object_or_404
+from django.db.models import Prefetch
 
 # Local Apps
-from questions.models import Category, FAQ
-from questions.serializers import CategorySerializer, FAQSerializer
+from faqs.models import Category, FAQ
+from faqs.serializers import CategoryWithFAQSerializer
 from contractor.models import Contractor
 from contractor.serializers import ContractorListSerializer
 from project.models import Project
@@ -12,45 +12,21 @@ from investments.models import InvestmentSale
 from investments.serializers import InvestmentSaleDetailSerializer
 
 # Third Party Packages
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework import status
 from rest_framework import generics
+
+
+
 
 
 # ---------------------------
 # 1. نمایش سوالات
 # ---------------------------
 
-class FAQViewSet(viewsets.ViewSet):
-    """
-     سوالات متداول
-    """
-
-    def list(self, request):
-        """لیست همه دسته‌ها و اختیاری همه FAQ ها"""
-        categories = Category.objects.all().order_by('name')
-        category_serializer = CategorySerializer(categories, many=True)
-
-        faqs = FAQ.objects.filter(is_featured= True).order_by('-created')
-        faq_serializer = FAQSerializer(faqs, many=True)
-
-        return Response({
-            "categories": category_serializer.data,
-            "faqs": faq_serializer.data
-        }, status=status.HTTP_200_OK)
-
-    def retrieve(self, request, pk=None):
-        """نمایش FAQ های یک دسته بر اساس slug"""
-        category = get_object_or_404(Category, slug=pk)
-        faqs = FAQ.objects.filter(category=category).order_by('-created')
-        faq_serializer = FAQSerializer(faqs, many=True)
-        return Response({
-            "category": CategorySerializer(category).data,
-            "faqs": faq_serializer.data
-        }, status=status.HTTP_200_OK)
-
-
+class FAQPageAPIView(generics.ListAPIView):
+    serializer_class = CategoryWithFAQSerializer
+    queryset = Category.objects.all().order_by('name').prefetch_related(
+        Prefetch("faqs", queryset= FAQ.objects.filter(is_featured= True).order_by('created'))
+    )
 
 
 
@@ -80,6 +56,9 @@ class ProjectListAPIView(generics.ListAPIView):
 
 
 
+# ---------------------------
+# 4. نمایش بازار
+# ---------------------------
 class InvestmentSaleListAPIview(generics.ListAPIView):
 
     queryset = InvestmentSale.objects.all()

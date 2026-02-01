@@ -1,5 +1,5 @@
 # Django Built-in Modules
-from django.urls import path, include
+from django.urls import path
 
 # Local Apps
 from . import views
