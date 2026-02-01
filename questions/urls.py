@@ -2,16 +2,14 @@
 from django.urls import path, include
 
 # Local Apps
-from .views import FAQViewSet
+from . import views
 
-# Third Party Packages
-from rest_framework.routers import DefaultRouter
 
 
 app_name = 'faqs'
-router = DefaultRouter()
-router.register(r'faqs', FAQViewSet, basename='faqs')
 
 urlpatterns = [
-    path('', include(router.urls)),
+#     path('faqs/categories/',views.FAQCategoryListAPIView.as_view(), name= 'categories'),
+#     path("faqs/category/<str:slug>/faqs/", views.FAQByCategoryAPIView.as_view(), name= 'faqs'),
+    path('faqs/', views.FAQPageAPIView.as_view(), name= "faqs")
 ]
