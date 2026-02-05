@@ -36,6 +36,7 @@ ZARINPAL_VERIFY_URL = settings.ZARINPAL_VERIFY_URL
 # ---------------------------
 class WithdrawRequestCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = WithdrawRequestSerializer
 
     def post(self, request):
         serializer = WithdrawRequestSerializer(data=request.data, context={'request': request})
@@ -99,6 +100,7 @@ class WalletDepositRequestAPIView(APIView):
     """
 
     permission_classes = [IsAuthenticated]
+    serializer_class = DepositSerializer
 
     def post(self, request):
         serializer = DepositSerializer(data=request.data)
@@ -248,6 +250,7 @@ class WalletDepositVerifyAPIView(APIView):
 # ---------------------------
 class SuggestedDepositAmountsAPIView(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = SuggestedDepositAmountSerializer
 
     def get(self, request):
         amounts = SuggestedDepositAmount.objects.filter(is_active=True)
@@ -266,6 +269,7 @@ class CreditCardCreateAPIView(APIView):
     افزودن کارت بانکی جدید برای کاربر
     """
     permission_classes = [IsAuthenticated]
+    serializer_class = CreditCardSerializer
 
     def post(self, request):
         serializer = CreditCardSerializer(data=request.data)
@@ -304,6 +308,7 @@ class CreditCardListAPIView(APIView):
     لیست کارت‌های بانکی کاربر
     """
     permission_classes = [IsAuthenticated]
+    serializer_class = CreditCardSerializer
 
     def get(self, request):
         cards = CreditCard.objects.filter(user=request.user, is_active= True).order_by("-created_at")
@@ -353,6 +358,7 @@ class WalletDetailAPIView(APIView):
     مشاهده موجودی کیف پول کاربر
     """
     permission_classes = [IsAuthenticated]
+    serializer_class = WalletSerializer
 
     def get(self, request):
         try:

@@ -6,9 +6,13 @@ from django.utils.translation import gettext_lazy as _
 
 # Local Apps
 from .models import AbstractBaseSeoModel, MetadataModel
+from unfold_admin.admin import ModelAdmin
+
+# Third Party Packages
+from unfold.admin import TabularInline
 
 
-class MetadataAdminInline(admin.TabularInline):
+class MetadataAdminInline(TabularInline):
     model = MetadataModel
     formfield_overrides = {
         models.TextField: {
@@ -18,7 +22,7 @@ class MetadataAdminInline(admin.TabularInline):
     extra = 0
 
 
-class SeoAdminMixin(admin.ModelAdmin):
+class SeoAdminMixin(ModelAdmin):
     fieldsets = (
         (_('گزینه های سئو'), {
             'fields': (
@@ -48,7 +52,7 @@ class SeoAdminMixin(admin.ModelAdmin):
     actions = (make_published, make_drafted)
 
 
-class ContentAdminMixin(admin.ModelAdmin):
+class ContentAdminMixin(ModelAdmin):
     fieldsets = (
         (_('توضیحات و محتوا'), {
             'fields': ('description', 'content',),

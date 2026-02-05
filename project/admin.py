@@ -5,18 +5,23 @@ from django.utils.translation import gettext_lazy as _
 # Local Apps
 from utils.admin import DateTimeAdminMixin
 from seo.admin import SeoAdminMixin
+from unfold_admin.admin import ModelAdmin
 from .models import (
     Project, ProjectStatus,
     Gallery, ProjectProgressReport,
     ProjectDocuments
 )
 
+# Third Party Packages
+from unfold.admin import TabularInline
+
+
+
 
 # ---------------------------------------------------------
 # Inline Models
 # ---------------------------------------------------------
-
-class GalleryInline(admin.TabularInline):
+class GalleryInline(TabularInline):
     model = Gallery
     extra = 1
     fields = ("image", "alt")
@@ -24,14 +29,14 @@ class GalleryInline(admin.TabularInline):
     verbose_name_plural = _("گالری پروژه")
 
 
-class ProjectProgressReportInline(admin.TabularInline):
+class ProjectProgressReportInline(TabularInline):
     model = ProjectProgressReport
     extra = 1
     verbose_name = _("گزارش")
     verbose_name_plural = _("گزارش‌های پیشرفت")
 
 
-class ProjectDocumentsInline(admin.TabularInline):
+class ProjectDocumentsInline(TabularInline):
     model = ProjectDocuments
     extra = 1
     verbose_name = _("سند")
@@ -41,9 +46,8 @@ class ProjectDocumentsInline(admin.TabularInline):
 # ---------------------------------------------------------
 # Project Admin
 # ---------------------------------------------------------
-
 @admin.register(Project)
-class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
+class ProjectAdmin(SeoAdminMixin, ModelAdmin):
     list_display = (
         'title', 'province', 'city', 'usage_type', 'get_contractors', 'status', 'price_per_meter', 'created',
         'page_display_status', 'is_featured', 'remaining_area', 'sold_area',
@@ -160,12 +164,13 @@ class ProjectAdmin(SeoAdminMixin, admin.ModelAdmin):
 
     get_contractors.short_description = _('سازندگان')
 
+
+
 # ---------------------------------------------------------
 # ProjectStatus Admin
 # ---------------------------------------------------------
-
 @admin.register(ProjectStatus)
-class ProjectStatusAdmin(admin.ModelAdmin):
+class ProjectStatusAdmin(ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 

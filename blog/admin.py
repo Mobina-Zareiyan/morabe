@@ -4,9 +4,11 @@ from django.contrib import admin
 # Local Apps
 from utils.admin import DateTimeAdminMixin
 from .models import Blog, BlogComment
+from unfold_admin.admin import ModelAdmin
+
 
 @admin.register(Blog)
-class BlogAdmin(admin.ModelAdmin):
+class BlogAdmin(ModelAdmin):
     list_display = ('title', 'created', 'updated')  # نمایش ستون‌ها در لیست
     fieldsets = (
         (None, {
@@ -23,7 +25,7 @@ class BlogAdmin(admin.ModelAdmin):
 
 
 @admin.register(BlogComment)
-class BlogCommentAdmin(admin.ModelAdmin):
+class BlogCommentAdmin(ModelAdmin):
     list_display = ('name', 'email', 'blog', 'is_visible')
     list_filter = ('is_visible',)
     search_fields = ('name', 'email', 'content')

@@ -89,6 +89,7 @@ class CreateInvestmentSaleAPIView(APIView):
 
 class InvestmentSaleQuoteAPIView(APIView):
     permission_classes = [IsAuthenticatedUser]
+    serializer_class = InvestmentSaleQuoteSerializer
 
     def post(self, request):
         serializer = InvestmentSaleQuoteSerializer(data=request.data)

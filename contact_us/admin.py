@@ -5,11 +5,12 @@ from django.utils.translation import gettext_lazy as _
 # Local Apps
 from utils.admin import DateTimeAdminMixin
 from .models import ContactUsMessages
+from unfold_admin.admin import ModelAdmin
 
 
 
 @admin.register(ContactUsMessages)
-class ContactUsMessagesAdmin(admin.ModelAdmin):
+class ContactUsMessagesAdmin(ModelAdmin):
     list_display = ('full_name', 'email', 'phone', 'is_checked', 'created',)
     fieldsets = (
         (None, {'fields': ('full_name', 'email', 'phone', 'message', 'is_checked',)}),

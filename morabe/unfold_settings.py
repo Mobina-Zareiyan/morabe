@@ -26,7 +26,7 @@ UNFOLD = {
     "DASHBOARD_CALLBACK": "morabe.unfold_settings.dashboard_callback",
 
     "STYLES": [
-        lambda request: static("unfold/css/style.css"),
+        lambda request: static("unfold/css/rtl.css"),
     ],
     "SCRIPTS": [
         lambda request: static("unfold/js/script.js"),
@@ -146,8 +146,8 @@ UNFOLD = {
                 "collapsible": True,
                 "icon": "help",
                 "items": [
-                    {"title": _("دسته‌بندی‌ها"), "link": reverse_lazy("admin:questions_category_changelist"), "icon": "category"},
-                    {"title": _("سوالات"), "link": reverse_lazy("admin:questions_faq_changelist"), "icon": "question_answer"},
+                    {"title": _("دسته‌بندی‌ها"), "link": reverse_lazy("admin:faqs_category_changelist"), "icon": "category"},
+                    {"title": _("سوالات"), "link": reverse_lazy("admin:faqs_faq_changelist"), "icon": "question_answer"},
                 ]
             },
             {

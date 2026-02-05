@@ -5,11 +5,12 @@ from django.utils.translation import gettext_lazy as _
 # Local Apps
 from utils.admin import DateTimeAdminMixin
 from .models import SiteGlobalSetting, SocialMediaSetting
+from unfold_admin.admin import ModelAdmin
 
 
 
 @admin.register(SiteGlobalSetting)
-class SiteGlobalSettingAdmin(admin.ModelAdmin):
+class SiteGlobalSettingAdmin(ModelAdmin):
     list_display = ('address_short', 'created', 'updated',)
     fieldsets = (
         (_('ارتباط با ما'), {'fields': ('address', 'map', 'email', 'phone', )}),
@@ -35,7 +36,7 @@ class SiteGlobalSettingAdmin(admin.ModelAdmin):
 
 
 @admin.register(SocialMediaSetting)
-class SocialMediaSettingAdmin(admin.ModelAdmin):
+class SocialMediaSettingAdmin(ModelAdmin):
     readonly_fields = (*DateTimeAdminMixin.readonly_fields,)
     list_display = ('name',)
     search_fields = ('name',)

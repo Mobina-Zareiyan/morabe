@@ -4,7 +4,10 @@ from django.contrib import admin
 
 # Local Apps
 from .models import User, OtpCode
+from unfold_admin.admin import ModelAdmin
 
+# Third Party Packages
+from unfold.admin import TabularInline
 
 
 admin.site.unregister(Group)
@@ -13,7 +16,7 @@ admin.site.unregister(Group)
 # -----------------------------
 # Inline برای زیرمجموعه‌ها (Referrals)
 # -----------------------------
-class ReferralInline(admin.TabularInline):
+class ReferralInline(TabularInline):
     model = User
     fk_name = 'referred_by'  # مشخص می‌کند این Inline مربوط به چه فیلدی است
     fields = ('first_name', 'last_name', 'mobile_number', 'referral_code', 'date_birth')
@@ -28,7 +31,7 @@ class ReferralInline(admin.TabularInline):
 # Admin کاربر
 # -----------------------------
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(ModelAdmin):
     # ستون‌های لیست نمایش
     list_display = (
         'id',
@@ -92,6 +95,6 @@ class UserAdmin(admin.ModelAdmin):
 
 
 @admin.register(OtpCode)
-class OtpCodeAdmin(admin.ModelAdmin):
+class OtpCodeAdmin(ModelAdmin):
     list_display = ('phone_number', 'code', 'is_active', 'is_verified', 'expires_at')
     readonly_fields = ('phone_number', 'code', 'is_active', 'is_verified', 'expires_at', )

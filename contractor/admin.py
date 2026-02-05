@@ -6,13 +6,15 @@ from django.utils.translation import gettext_lazy as _
 from .models import Contractor, Gallery, RegistrationContractor
 from seo.admin import SeoAdminMixin
 from utils.admin import DateTimeAdminMixin
+from unfold_admin.admin import ModelAdmin
+from unfold.admin import TabularInline
 
 
 
 # ---------------------------------------------------------
 # Inline Models
 # ---------------------------------------------------------
-class GalleryInline(admin.TabularInline):
+class GalleryInline(TabularInline):
     model = Gallery
     extra = 1
     fields = ("image_preview", "image", "title", "subtitle", "alt")
@@ -32,7 +34,7 @@ class GalleryInline(admin.TabularInline):
 # Contractor Admin
 # ---------------------------------------------------------
 @admin.register(Contractor)
-class ContractorAdmin(SeoAdminMixin, admin.ModelAdmin):
+class ContractorAdmin(SeoAdminMixin, ModelAdmin):
     list_display = (
         "name",
         "is_featured",
@@ -76,7 +78,7 @@ class ContractorAdmin(SeoAdminMixin, admin.ModelAdmin):
 # RegistrationContractor Admin
 # ---------------------------------------------------------
 @admin.register(RegistrationContractor)
-class RegistrationContractorAdmin(admin.ModelAdmin):
+class RegistrationContractorAdmin(ModelAdmin):
     list_display = ("full_name", "phone", "email", "contractor_type", "is_checked", "created")
     list_filter = ("is_checked",)
     search_fields = ("full_name", "phone", "email", "contractor_type")

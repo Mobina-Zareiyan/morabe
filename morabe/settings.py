@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'investments.apps.InvestmentsConfig',
     'payment.apps.PaymentConfig',
     'home.apps.HomeConfig',
+    'unfold_admin.apps.UnfoldAdminConfig',
 
 
 

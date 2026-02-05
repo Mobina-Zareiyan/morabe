@@ -4,6 +4,8 @@ from django.contrib import admin
 # Local Apps
 from .models import Wallet, CreditCard, Transaction, WithdrawRequest, SuggestedDepositAmount
 from utils.admin import DateTimeAdminMixin
+from unfold_admin.admin import ModelAdmin
+
 
 
 
@@ -11,7 +13,7 @@ from utils.admin import DateTimeAdminMixin
 # Wallet Admin
 # ---------------------------
 @admin.register(Wallet)
-class WalletAdmin(admin.ModelAdmin):
+class WalletAdmin(ModelAdmin):
     list_display = (
         "user",
         "balance",
@@ -34,7 +36,7 @@ class WalletAdmin(admin.ModelAdmin):
 # CreditCard Admin
 # ---------------------------
 @admin.register(CreditCard)
-class CreditCardAdmin(admin.ModelAdmin):
+class CreditCardAdmin(ModelAdmin):
     list_display = (
         "user",
         "bank_name",
@@ -77,7 +79,7 @@ class TransactionAdmin(admin.ModelAdmin):
 # WithdrawRequest Admin
 # ---------------------------
 @admin.register(WithdrawRequest)
-class WithdrawRequestAdmin(admin.ModelAdmin):
+class WithdrawRequestAdmin(ModelAdmin):
     list_display = (
         "wallet",
         "amount",
@@ -99,7 +101,7 @@ class WithdrawRequestAdmin(admin.ModelAdmin):
 # SuggestedDepositAmount Admin
 # ---------------------------
 @admin.register(SuggestedDepositAmount)
-class SuggestedDepositAmountAdmin(admin.ModelAdmin):
+class SuggestedDepositAmountAdmin(ModelAdmin):
     list_display = ("amount", "is_active")
     list_filter = ("is_active",)
     search_fields = ("amount",)

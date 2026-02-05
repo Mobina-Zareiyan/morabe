@@ -1,13 +1,17 @@
+# Django Built-in Modules
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+
+# Local Apps
 from .models import Investment, InvestmentSale
 from utils.admin import DateTimeAdminMixin
-from django.utils.translation import gettext_lazy as _
+from unfold_admin.admin import ModelAdmin
 
 
 
 
 @admin.register(Investment)
-class InvestmentAdmin(admin.ModelAdmin):
+class InvestmentAdmin(ModelAdmin):
     list_display = (
         "id",
         "user_fullname",
@@ -99,7 +103,7 @@ class InvestmentAdmin(admin.ModelAdmin):
 
 
 @admin.register(InvestmentSale)
-class InvestmentSaleAdmin(admin.ModelAdmin):
+class InvestmentSaleAdmin(ModelAdmin):
     list_display = (
         "id",
         "investment_info",

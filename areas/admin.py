@@ -6,11 +6,12 @@ from django.utils.translation import gettext_lazy as _
 # Local Apps
 from .models import Province, City
 from utils.admin import DateTimeAdminMixin
+from unfold_admin.admin import ModelAdmin
 
 
 
 @admin.register(Province)
-class ProvinceAdmin(admin.ModelAdmin):
+class ProvinceAdmin(ModelAdmin):
     fieldsets = (
         (None, {'fields': ('name',)}),
         (
@@ -24,7 +25,7 @@ class ProvinceAdmin(admin.ModelAdmin):
 
 
 @admin.register(City)
-class CityAdmin(admin.ModelAdmin):
+class CityAdmin(ModelAdmin):
     fieldsets = (
         (None, {'fields': ('province', 'name',)}),
         (

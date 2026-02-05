@@ -4,13 +4,17 @@ from django.utils.translation import gettext_lazy as _
 
 # Local Apps
 from .models import Category, FAQ
+from unfold_admin.admin import ModelAdmin
+
+# Third Party Packages
+from unfold.admin import TabularInline
 
 
 
 # -------------------------------
 # Inline for FAQ inside Category
 # -------------------------------
-class FAQInline(admin.TabularInline):
+class FAQInline(TabularInline):
     model = FAQ
     extra = 1
     fields = ('question', 'answer', 'is_featured')
@@ -21,7 +25,7 @@ class FAQInline(admin.TabularInline):
 # Category Admin
 # -------------------------------
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(ModelAdmin):
     list_display = (
         'name',
         'slug',
@@ -58,7 +62,7 @@ class CategoryAdmin(admin.ModelAdmin):
 # Separate FAQ Admin (optional)
 # -------------------------------
 @admin.register(FAQ)
-class FAQAdmin(admin.ModelAdmin):
+class FAQAdmin(ModelAdmin):
     list_display = ('question', 'category', 'is_featured', 'created', 'updated')
     list_filter = ('category', 'is_featured')
     # list_editable = ('is_featured',)

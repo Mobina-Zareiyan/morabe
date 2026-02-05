@@ -1,13 +1,14 @@
 # Django Built-in Modules
 from django.contrib import admin
-from django.utils.html import mark_safe # اگه نیاز شد جایی از html استفاده کنیم نیازه که این باشه
+from django.utils.html import mark_safe # for using .html
 from django.utils.translation import gettext_lazy as _
 
 # Local Apps
 from seo.admin import SeoAdminMixin
+from unfold_admin.admin import ModelAdmin
 
 
-class DateTimeAdminMixin(admin.ModelAdmin):
+class DateTimeAdminMixin(ModelAdmin):
     fields = ('jcreated', 'jupdated',)
     fieldsets = (
         (_('تاریخچه'), {
@@ -20,7 +21,7 @@ class DateTimeAdminMixin(admin.ModelAdmin):
     date_hierarchy = 'created'
 
 
-class StaticPageAdminMixin(admin.ModelAdmin):
+class StaticPageAdminMixin(ModelAdmin):
     fieldsets = (
         (_('محتوا'), {'fields': ('content',)}),
         *SeoAdminMixin.fieldsets,
